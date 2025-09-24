@@ -1,0 +1,5 @@
+[20.09.25, 21:15:10] Alice: Bist du morgen frei?
+[20.09.25, 21:16:25] Bob: Denke schon, wieso?
+[21.09.25, 09:05:55] Alice: Lass uns Kaffee trinken ☕
+[21.09.25, 09:07:00] Bob: 10 Uhr passt?
+[21.09.25, 09:07:18] Alice: Perfekt!
