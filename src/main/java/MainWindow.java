@@ -28,7 +28,7 @@ public class MainWindow implements ActionListener {
         window = new JFrame();
         window.setTitle("WhatsApp-Analizer");
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        window.setSize(800,500);
+        window.setSize(1200,500);
         window.setLocationRelativeTo(null);
 
         JPanel selFile = new JPanel();
@@ -55,6 +55,7 @@ public class MainWindow implements ActionListener {
         selFile.add(buttonShow);
 
         chartPanel = new JPanel();
+        chartPanel.setLayout(new GridLayout(0, 2, 5, 5));
 
         window.add(selFile, BorderLayout.NORTH);
 
@@ -84,10 +85,14 @@ public class MainWindow implements ActionListener {
             }
         }
         else if (com.equals("Show Analytics")) {
+            chartPanel.removeAll();
             try {
                 currentChatInfo = new ChatInfo(chosenFile);
-                showMessages();
+                Map<String, Integer> messageResults = currentChatInfo.callMessages(false, "", "0");
+                Map<String, Integer> wordsResults = currentChatInfo.callWords(false, "", "0");
 
+                addBarGraphFromMap(messageResults, "Messages");
+                addBarGraphFromMap(wordsResults, "Words");
             } catch (FileNotFoundException err) {
                 System.out.println("File Not Found");
             }
@@ -96,26 +101,22 @@ public class MainWindow implements ActionListener {
         
     }
 
-    public void showMessages() {
-        Map<String, Integer> messageResults = currentChatInfo.callMessages(false, "", "0");
+    public void addBarGraphFromMap(Map<String, Integer> map, String title) {
         String name = currentChatInfo.getName();
 
-        DefaultCategoryDataset messagesDataset = new DefaultCategoryDataset( );
-        for (Map.Entry<String, Integer> me : messageResults.entrySet()) {
+        DefaultCategoryDataset wordsDataset = new DefaultCategoryDataset( );
+        for (Map.Entry<String, Integer> me : map.entrySet()) {
             if (!me.getKey().equals("Total")) {
-                messagesDataset.addValue(me.getValue(), me.getKey(), "");
+                wordsDataset.addValue(me.getValue(), me.getKey(), "");
             }
         }
 
-        JFreeChart messagesBarGraph = ChartFactory.createBarChart("Messages: " + name,
-                "Sender", "Messages", messagesDataset);
+        JFreeChart messagesBarGraph = ChartFactory.createBarChart(title + ": " + name,
+                "Sender", title, wordsDataset);
 
         ChartPanel panel = new ChartPanel(messagesBarGraph);
-        panel.setPreferredSize(new java.awt.Dimension(200, 200));
 
-        chartPanel.removeAll(); // clear old charts if needed
-        chartPanel.setLayout(new BorderLayout());
-        chartPanel.add(panel, BorderLayout.CENTER);
+        chartPanel.add(panel);
         chartPanel.validate();
     }
 }
