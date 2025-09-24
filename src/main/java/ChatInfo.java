@@ -23,11 +23,9 @@ public class ChatInfo {
 
         this.fileName = fileName;
 
-        this.name = fileName;
+        String[] names = fileName.split("/");
 
-        if (this.name.startsWith("Chats/")) {
-            this.name = this.name.replace("Chats/", "");
-        }
+        this.name = names[names.length - 1];
 
         if (this.name.endsWith("_chat.txt")) {
             this.name = this.name.replace("_chat.txt", "");
