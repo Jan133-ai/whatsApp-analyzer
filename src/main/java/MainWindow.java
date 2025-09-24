@@ -1,3 +1,9 @@
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -13,7 +19,7 @@ public class MainWindow implements ActionListener {
     private JFrame window;
     static JLabel l;
     static JButton buttonShow;
-    static JLabel infoLabel;
+    static JPanel chartPanel;
     private String chosenFile;
     private ChatInfo currentChatInfo;
 
@@ -26,6 +32,7 @@ public class MainWindow implements ActionListener {
         window.setLocationRelativeTo(null);
 
         JPanel selFile = new JPanel();
+        selFile.setLayout(new GridLayout(0, 2, 5, 5));
 
         JLabel l1 = new JLabel("Select the .txt-File");
         l1.setBounds(500, 50, 120, 80);
@@ -41,25 +48,17 @@ public class MainWindow implements ActionListener {
 
         selFile.add(l);
 
-        JPanel showDiag = new JPanel();
-
         buttonShow = new JButton("Show Analytics");
         buttonShow.addActionListener(this);
         buttonShow.setEnabled(false);
 
-        showDiag.add(buttonShow);
+        selFile.add(buttonShow);
 
-        JPanel diagrams = new JPanel();
-
-        infoLabel = new JLabel("Label");
-
-        diagrams.add(infoLabel);
+        chartPanel = new JPanel();
 
         window.add(selFile, BorderLayout.NORTH);
 
-        window.add(showDiag, BorderLayout.CENTER);
-
-        window.add(diagrams, BorderLayout.SOUTH);
+        window.add(chartPanel, BorderLayout.CENTER);
 
     }
 
@@ -87,7 +86,7 @@ public class MainWindow implements ActionListener {
         else if (com.equals("Show Analytics")) {
             try {
                 currentChatInfo = new ChatInfo(chosenFile);
-                showMessages(currentChatInfo);
+                showMessages();
 
             } catch (FileNotFoundException err) {
                 System.out.println("File Not Found");
@@ -97,17 +96,26 @@ public class MainWindow implements ActionListener {
         
     }
 
-    public void showMessages(ChatInfo currentChatInfo) {
+    public void showMessages() {
         Map<String, Integer> messageResults = currentChatInfo.callMessages(false, "", "0");
-        String messagesString = "";
+        String name = currentChatInfo.getName();
+
+        DefaultCategoryDataset messagesDataset = new DefaultCategoryDataset( );
         for (Map.Entry<String, Integer> me : messageResults.entrySet()) {
-            if (me.getKey() != "Total") {
-                messagesString += (me.getKey() + " : " + me.getValue());
-            } 
-            else {
-                messagesString += ("\n " + me.getKey() + " : " + me.getValue());
+            if (!me.getKey().equals("Total")) {
+                messagesDataset.addValue(me.getValue(), me.getKey(), "");
             }
         }
-        infoLabel.setText(messagesString);
+
+        JFreeChart messagesBarGraph = ChartFactory.createBarChart("Messages: " + name,
+                "Sender", "Messages", messagesDataset);
+
+        ChartPanel panel = new ChartPanel(messagesBarGraph);
+        panel.setPreferredSize(new java.awt.Dimension(200, 200));
+
+        chartPanel.removeAll(); // clear old charts if needed
+        chartPanel.setLayout(new BorderLayout());
+        chartPanel.add(panel, BorderLayout.CENTER);
+        chartPanel.validate();
     }
 }
