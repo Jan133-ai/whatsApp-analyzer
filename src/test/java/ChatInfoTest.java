@@ -71,4 +71,28 @@ public class ChatInfoTest {
         assertEquals(resultsDay2.get("Bob"), 0);
         assertEquals(resultsDay2.get("Total"), 0);
     }
+
+    @Test
+    public void testWordsPerMessage() {
+        Map<String, Float> results = chatInfo1.callWordsPerMessage(false, "", "");
+        assertNotNull(results);
+
+        assertEquals(results.get("Alice"), (float) 10.0/3);
+        assertEquals(results.get("Bob"), (float) 6.0/2);
+        assertEquals(results.get("Total"), (float) 16.0/5);
+
+        Map<String, Float> resultsDay = chatInfo1.callWordsPerMessage(true, "-d", "21.09.2025");
+        assertNotNull(results);
+
+        assertEquals(resultsDay.get("Alice"), (float) 6.0/2);
+        assertEquals(resultsDay.get("Bob"), (float) 3.0);
+        assertEquals(resultsDay.get("Total"), (float) 9.0/3);
+
+        Map<String, Float> resultsDay2 = chatInfo1.callWordsPerMessage(true, "-d", "23.09.2025");
+        assertNotNull(results);
+
+        assertEquals(resultsDay2.get("Alice"), (float) 0.0);
+        assertEquals(resultsDay2.get("Bob"), (float) 0.0);
+        assertEquals(resultsDay2.get("Total"), (float) 0.0);
+    }
 }
