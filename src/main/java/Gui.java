@@ -6,7 +6,7 @@ public class Gui {
             @Override
             public void run() {
                 MainWindow main = new MainWindow();
-                main.show();
+                main.setVisible(true);
             }
         });
      }
