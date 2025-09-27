@@ -39,6 +39,8 @@ public class ChatInfo {
             this.name = this.name.replace(".txt", "");
         }
 
+        this.name = this.name.replace("_", " ");
+
         messageListGes = new LinkedList<>();
         chatterSet = new HashSet<>();
 

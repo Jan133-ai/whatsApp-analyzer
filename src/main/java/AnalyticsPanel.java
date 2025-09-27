@@ -24,10 +24,12 @@ public class AnalyticsPanel extends JPanel {
         JLabel titleLabel = new JLabel("Overall Data");
         Font labelFont = titleLabel.getFont();
         titleLabel.setFont(new Font(labelFont.getName(), Font.BOLD, 20));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         add(titleLabel);
 
         JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JRadioButton radioButtonBar = new JRadioButton("Bar Chart");
         radioButtonBar.setSelected(true);

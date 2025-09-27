@@ -1,44 +1,42 @@
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
-
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 
-import java.util.Map;
-
 public class MainWindow extends JFrame implements ActionListener {
 
-    private FileSelectorPanel fileSelectorPanel;
+    final private FileSelectorPanel fileSelectorPanel;
     private JScrollPane analyticsScrollPane;
     static JButton buttonShow;
 
     
     public MainWindow() {
-        setTitle("WhatsApp-Analizer");
+        setTitle("WhatsApp-Analyzer");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(1200,500);
+        setSize(1200,600);
         setLocationRelativeTo(null);
 
-        fileSelectorPanel = new FileSelectorPanel();
+        JLabel titleLabel = new JLabel("File Selection");
+        Font labelFont = titleLabel.getFont();
+        titleLabel.setFont(new Font(labelFont.getName(), Font.BOLD, 20));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
-        topPanel.add(fileSelectorPanel);
+        fileSelectorPanel = new FileSelectorPanel();
+        fileSelectorPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         buttonShow = new JButton("Show Analytics");
         buttonShow.addActionListener(this);
+        buttonShow.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel topPanel = new JPanel();
+        topPanel.add(titleLabel);
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+        topPanel.add(fileSelectorPanel);
         topPanel.add(buttonShow);
 
         add(topPanel, BorderLayout.NORTH);
-
     }
 
     @Override

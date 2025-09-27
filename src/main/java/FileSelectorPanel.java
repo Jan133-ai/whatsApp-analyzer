@@ -7,7 +7,7 @@ import java.io.File;
 
 public class FileSelectorPanel extends JPanel {
 
-    private JLabel statusLabel;
+    final private JLabel statusLabel;
     private File selectedFile;
 
     public FileSelectorPanel() {
