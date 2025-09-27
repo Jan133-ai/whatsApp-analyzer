@@ -19,16 +19,28 @@ public class AnalyticsPanel extends JPanel {
 
     public AnalyticsPanel(File file) throws FileNotFoundException {
 
-        JRadioButton radioButtonBar = new JRadioButton("Bar Graph");
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        JLabel titleLabel = new JLabel("Overall Data");
+        Font labelFont = titleLabel.getFont();
+        titleLabel.setFont(new Font(labelFont.getName(), Font.BOLD, 20));
+
+        add(titleLabel);
+
+        JPanel buttonsPanel = new JPanel();
+
+        JRadioButton radioButtonBar = new JRadioButton("Bar Chart");
         radioButtonBar.setSelected(true);
-        JRadioButton radioButtonPie = new JRadioButton("Round Graph");
+        JRadioButton radioButtonPie = new JRadioButton("Pie Chart");
 
         ButtonGroup choice = new ButtonGroup();
         choice.add(radioButtonBar);
         choice.add(radioButtonPie);
 
-        add(radioButtonBar);
-        add(radioButtonPie);
+        buttonsPanel.add(radioButtonBar);
+        buttonsPanel.add(radioButtonPie);
+
+        add(buttonsPanel);
 
         radioButtonBar.addActionListener(new ActionListener() {
             @Override
@@ -64,22 +76,26 @@ public class AnalyticsPanel extends JPanel {
         currentChatInfo = new ChatInfo(file);
         Map<String, Integer> messageResults = currentChatInfo.callMessages(false, "", "0");
         Map<String, Integer> wordsResults = currentChatInfo.callWords(false, "", "0");
+        Map<String, Float> wordsPerMessageResults = currentChatInfo.callWordsPerMessage(false, "", "0");
 
         addBarGraphFromMap(messageResults, "Messages", chartPanel);
         addBarGraphFromMap(wordsResults, "Words", chartPanel);
 
-        JScrollPane scrollPane = new JScrollPane(chartPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JPanel chartPanel2 = new JPanel();
+        chartPanel2.setLayout(new GridLayout(0, 2, 0, 5));
 
-        add(scrollPane, BorderLayout.CENTER);
+        addBarGraphFromMap(wordsPerMessageResults, "Words/Message", chartPanel2);
+
+
+        add(chartPanel);
+        add(chartPanel2);
     }
 
-    public void addBarGraphFromMap(Map<String, Integer> map, String title, JPanel panel) {
+    public <T extends Number> void addBarGraphFromMap(Map<String, T> map, String title, JPanel panel) {
         String name = currentChatInfo.getName();
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (Map.Entry<String, Integer> me : map.entrySet()) {
+        for (Map.Entry<String, T> me : map.entrySet()) {
             if (!me.getKey().equals("Total")) {
                 dataset.addValue(me.getValue(), me.getKey(), title);
             }
@@ -89,7 +105,7 @@ public class AnalyticsPanel extends JPanel {
                 "Sender", title, dataset);
 
         ChartPanel chPanel = new ChartPanel(barChart);
-        chPanel.setPreferredSize(new Dimension(600, 350));
+        chPanel.setPreferredSize(new Dimension(500, 350));
         chPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 350));
         chPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -100,7 +116,7 @@ public class AnalyticsPanel extends JPanel {
     public void addPieChartFromMap(Map<String, Integer> map, String title, JPanel panel) {
         String name = currentChatInfo.getName();
 
-        DefaultPieDataset dataset = new DefaultPieDataset();
+        DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
         for (Map.Entry<String, Integer> me : map.entrySet()) {
             if (!me.getKey().equals("Total")) {
                 dataset.setValue(me.getKey(), me.getValue());
@@ -110,7 +126,7 @@ public class AnalyticsPanel extends JPanel {
         JFreeChart pieChart = ChartFactory.createPieChart(title + ": " + name, dataset);
 
         ChartPanel chPanel = new ChartPanel(pieChart);
-        chPanel.setPreferredSize(new Dimension(600, 350));
+        chPanel.setPreferredSize(new Dimension(500, 350));
         chPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 350));
         chPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 

@@ -16,12 +16,9 @@ import java.util.Map;
 
 public class MainWindow extends JFrame implements ActionListener {
 
-    JPanel mainPanel;
     private FileSelectorPanel fileSelectorPanel;
-    private AnalyticsPanel analyticsPanel;
+    private JScrollPane analyticsScrollPane;
     static JButton buttonShow;
-    static JPanel chartPanel;
-    private ChatInfo currentChatInfo;
 
     
     public MainWindow() {
@@ -49,11 +46,16 @@ public class MainWindow extends JFrame implements ActionListener {
         String com = e.getActionCommand();
         if (com.equals("Show Analytics")) {
             try {
-                if (analyticsPanel != null) {
-                    remove(analyticsPanel);
+                if (analyticsScrollPane != null) {
+                    remove(analyticsScrollPane);
                 }
-                analyticsPanel = new AnalyticsPanel(fileSelectorPanel.getSelectedFile());
-                add(analyticsPanel, BorderLayout.CENTER);
+                AnalyticsPanel analyticsPanel = new AnalyticsPanel(fileSelectorPanel.getSelectedFile());
+                analyticsScrollPane = new JScrollPane(analyticsPanel);
+                analyticsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                analyticsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                analyticsScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+                add(analyticsScrollPane, BorderLayout.CENTER);
+
                 revalidate();
                 repaint();
             } catch (FileNotFoundException err) {
