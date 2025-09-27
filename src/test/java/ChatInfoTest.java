@@ -1,10 +1,10 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,9 +18,9 @@ public class ChatInfoTest {
     static public void constructChatInfo() throws URISyntaxException, FileNotFoundException {
         URL resource = ChatInfoTest.class.getClassLoader().getResource("chat1.txt");
         assertNotNull(resource);
-        String filename = Paths.get(resource.toURI()).toString();
+        File file = new File(resource.toURI());
 
-        chatInfo1 = new ChatInfo(filename);
+        chatInfo1 = new ChatInfo(file);
         assertNotNull(chatInfo1);
     }
 

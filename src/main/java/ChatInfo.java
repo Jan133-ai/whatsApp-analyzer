@@ -4,28 +4,33 @@ import java.lang.NumberFormatException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class ChatInfo {
 
+    private static final List<String> BAD_ENDINGS = List.of(
+            "Video weggelassen",
+            "Bild weggelassen",
+            "Sticker weggelassen",
+            "Audio weggelassen",
+            "Diese Nachricht wurde gelöscht",
+            "Nachrichten und Anrufe sind Ende-zu-Ende-verschlüsselt. Niemand außerhalb dieses Chats kann sie lesen oder anhören, nicht einmal WhatsApp.",
+            "Nachrichten und Anrufe sind Ende-zu-Ende-verschlüsselt. Nur Personen in diesem Chat können sie lesen, anhören oder teilen.",
+            " hinzugefügt.",
+            "diese Gruppe erstellt."
+    );
     static private Message lastMessage;
-    
     private List<Message> messageListGes;
-    private List<String> chatterList;
-    private String fileName;
+    private Set<String> chatterSet;
     private String name;
+    private File file;
 
-    public ChatInfo (String fileName) throws FileNotFoundException {
+    public ChatInfo (File file) throws FileNotFoundException {
 
-        this.fileName = fileName;
+        this.file = file;
 
-        String[] names = fileName.split("/");
-
-        this.name = names[names.length - 1];
+        this.name = file.getName();
 
         if (this.name.endsWith("_chat.txt")) {
             this.name = this.name.replace("_chat.txt", "");
@@ -34,11 +39,10 @@ public class ChatInfo {
             this.name = this.name.replace(".txt", "");
         }
 
-
         messageListGes = new LinkedList<>();
-        chatterList = new LinkedList<>();
-        File chatText = new File(fileName);
-        Scanner reader = new Scanner(chatText);
+        chatterSet = new HashSet<>();
+
+        Scanner reader = new Scanner(file);
         while (reader.hasNextLine()) {
             String message = reader.nextLine();
             saveMessage(message);
@@ -56,26 +60,15 @@ public class ChatInfo {
             while (!info[2].endsWith(":")) {
 
                 String[] helper = info[3].split(" ", 2);
-                info[2] = info[2] + "_" + helper[0];
+                info[2] = info[2] + " " + helper[0];
                 if (info.length > 3) {
                     info[3] = helper[1];
                 }
             }
 
-            String[] date = info[0].split("[\\[.,]");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("'['dd.MM.yy,HH:mm:ss']'");
+            LocalDateTime dateTime = LocalDateTime.parse(info[0] + info[1], formatter);
 
-            int day = Integer.parseInt(date[1]);
-            int month = Integer.parseInt(date[2]);
-            int year = Integer.parseInt(date[3]) + 2000;
-
-            String[] time = info[1].split("[\\]:]");
-
-            int hour = Integer.parseInt(time[0]);
-            int minute = Integer.parseInt(time[1]);
-            int second = Integer.parseInt(time[2]);
-
-
-            LocalDateTime dateTime = LocalDateTime.of(year, month, day, hour, minute, second);
             String sender = info[2].replace(":", "");
             String text = "";
             if (info.length > 3) {
@@ -86,28 +79,24 @@ public class ChatInfo {
 
             lastMessage = messageStruct;
 
-            if (!chatterList.contains(sender)) {
-                chatterList.add(sender);
-            }
-
-            if (!messageStruct.getText().endsWith("Video weggelassen")
-                && !messageStruct.getText().endsWith("Bild weggelassen")
-                && !messageStruct.getText().endsWith("Sticker weggelassen")
-                && !messageStruct.getText().endsWith("Diese Nachricht wurde gelöscht")
-                && !messageStruct.getText().endsWith("Nachrichten und Anrufe sind Ende-zu-Ende-verschlüsselt. Niemand außerhalb dieses Chats kann sie lesen oder anhören, nicht einmal WhatsApp.")
-                && !messageStruct.getText().contains("Du hast die Gruppe ")
-                && !messageStruct.getText().endsWith("Nachrichten und Anrufe sind Ende-zu-Ende-verschlüsselt. Niemand außerhalb dieses Chats kann sie lesen oder anhören, nicht einmal WhatsApp.")) {
+            if (isValidMessage(text)) {
                     messageListGes.add(messageStruct);
+                    chatterSet.add(sender);
                 }
         } else {
             lastMessage.appendMessage(" " + message);
         }
     }
 
+    private boolean isValidMessage(String text) {
+        return BAD_ENDINGS.stream().noneMatch(text::endsWith)
+                && !text.contains("Du hast die Gruppe ");
+    }
+
     private List<Message> getMessagesByChatter(String name, List<Message> messageList) {
         
         List<Message> listByChatter = new LinkedList<>();
-        if (!chatterList.contains(name)) {
+        if (!chatterSet.contains(name)) {
             return listByChatter;
         }
 
@@ -154,7 +143,7 @@ public class ChatInfo {
     }
 
     private List<Message> filterListByFlags(String flags, String value) throws NumberFormatException {
-        if (!flags.startsWith("-") || value.equals("")) {
+        if (!flags.startsWith("-") || value.isEmpty()) {
             return messageListGes;
         }
 
@@ -168,7 +157,7 @@ public class ChatInfo {
 
         List<Message> filteredList = messageListGes;
 
-        Map<String, Integer> results = new HashMap<String, Integer>();
+        Map<String, Integer> results = new HashMap<>();
 
         if (filter) {
             filteredList = filterListByFlags(flags, value);
@@ -178,7 +167,7 @@ public class ChatInfo {
 
         results.put("Total", gesMessageNum);
 
-        for (String sender : chatterList) {
+        for (String sender : chatterSet) {
             int senderMessageNum = getMessagesByChatter(sender, filteredList).size();
             results.put(sender, senderMessageNum);
         }
@@ -190,7 +179,7 @@ public class ChatInfo {
 
         List<Message> filteredList = messageListGes;
 
-        Map<String, Integer> results = new HashMap<String, Integer>();
+        Map<String, Integer> results = new HashMap<>();
 
         if (filter) {
             filteredList = filterListByFlags(flags, value);
@@ -202,7 +191,7 @@ public class ChatInfo {
         }
         results.put("Total", wordsGes);
 
-        for (String sender : chatterList) {
+        for (String sender : chatterSet) {
             int wordsChatter = 0;
             for (Message message : getMessagesByChatter(sender, filteredList)) {
                 wordsChatter += message.getWords();
@@ -217,7 +206,7 @@ public class ChatInfo {
 
         List<Message> filteredList = messageListGes;
 
-        Map<String, Float> results = new HashMap<String, Float>();
+        Map<String, Float> results = new HashMap<>();
 
         if (filter) {
             filteredList = filterListByFlags(flags, value);
@@ -228,19 +217,19 @@ public class ChatInfo {
             wordsGes += message.getWords();
         }
 
-        if (filteredList.size() != 0) {
+        if (!filteredList.isEmpty()) {
             results.put("Total", ((float)(wordsGes) / filteredList.size()));
         }
         else {
             results.put("Total", (float)0);
         }
 
-        for (String sender : chatterList) {
+        for (String sender : chatterSet) {
             int wordsChatter = 0;
             for (Message message : getMessagesByChatter(sender, filteredList)) {
                 wordsChatter += message.getWords();
             }
-            if (getMessagesByChatter(sender, filteredList).size() != 0) {
+            if (!getMessagesByChatter(sender, filteredList).isEmpty()) {
                 results.put(sender, ((float)(wordsChatter) / getMessagesByChatter(sender, filteredList).size()));
             }
             else {
@@ -267,7 +256,7 @@ public class ChatInfo {
         }
         results.put("Total", diggaGes);
 
-        for (String sender : chatterList) {
+        for (String sender : chatterSet) {
             int diggaChatter = 0;
             for (Message message : getMessagesByChatter(sender, filteredList)) {
                 diggaChatter += message.getDigga();
@@ -281,7 +270,7 @@ public class ChatInfo {
     public Map<String, LocalTime> callAnswerTime(int maxHours) {
         Map<String, LocalTime> result = new HashMap<String, LocalTime>();
 
-        for (String chatter : chatterList) {
+        for (String chatter : chatterSet) {
             LocalTime duration = LocalTime.MIN;
             
             duration = LocalTime.MIN.plusSeconds(getAvgAnswerTimeByChatter(chatter, maxHours));
@@ -292,7 +281,7 @@ public class ChatInfo {
     }
 
     public int getAvgAnswerTimeByChatter(String chatter, int maxHours) {
-        int answerTimeSecondsGes = 0;
+        long answerTimeSecondsGes = 0;
         int answers = 0;
 
         LocalDateTime lastFromOther = null;
@@ -313,18 +302,18 @@ public class ChatInfo {
             return 0;
         }
 
-        return answerTimeSecondsGes/answers;
+        return (int) answerTimeSecondsGes/answers;
     }
 
     public Map<String, Integer> callAnswers(boolean filter, int fromMin, int toMin) throws NumberFormatException{
         Map<String, Integer> results = new HashMap<String, Integer>();
         if (!filter) {
-            for (String chatter : chatterList) {
+            for (String chatter : chatterSet) {
                 results.put(chatter, answersGes(chatter));
             }
         }
         else {
-            for (String chatter : chatterList) {
+            for (String chatter : chatterSet) {
                 int answersBetween = answersBetween(chatter, fromMin, toMin);
                 results.put(chatter, answersBetween);
             } 
@@ -373,16 +362,12 @@ public class ChatInfo {
         return answers;
     }
 
-    public List<String> getChatterList() {
-        return chatterList;
+    public Set<String> getChatterSet() {
+        return chatterSet;
     }
 
     public List<Message> getMessageListGes() {
         return messageListGes;
-    }
-
-    public String getFileName() {
-        return fileName;
     }
 
     public String getName() {

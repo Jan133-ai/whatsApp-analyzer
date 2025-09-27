@@ -3,12 +3,12 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
@@ -16,10 +16,8 @@ public class AnalyticsPanel extends JPanel {
 
     JPanel chartPanel;
     ChatInfo currentChatInfo;
-    DefaultCategoryDataset messagesDataset;
-    DefaultCategoryDataset wordsDataset;
 
-    public AnalyticsPanel(String filename) throws FileNotFoundException {
+    public AnalyticsPanel(File file) throws FileNotFoundException {
 
         JRadioButton radioButtonBar = new JRadioButton("Bar Graph");
         radioButtonBar.setSelected(true);
@@ -63,7 +61,7 @@ public class AnalyticsPanel extends JPanel {
         chartPanel.setLayout(new GridLayout(0, 2, 0, 5));
 
 
-        currentChatInfo = new ChatInfo(filename);
+        currentChatInfo = new ChatInfo(file);
         Map<String, Integer> messageResults = currentChatInfo.callMessages(false, "", "0");
         Map<String, Integer> wordsResults = currentChatInfo.callWords(false, "", "0");
 
@@ -87,10 +85,10 @@ public class AnalyticsPanel extends JPanel {
             }
         }
 
-        JFreeChart messagesBarGraph = ChartFactory.createBarChart(title + ": " + name,
+        JFreeChart barChart = ChartFactory.createBarChart(title + ": " + name,
                 "Sender", title, dataset);
 
-        ChartPanel chPanel = new ChartPanel(messagesBarGraph);
+        ChartPanel chPanel = new ChartPanel(barChart);
         chPanel.setPreferredSize(new Dimension(600, 350));
         chPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 350));
         chPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -109,9 +107,9 @@ public class AnalyticsPanel extends JPanel {
             }
         }
 
-        JFreeChart messagesBarGraph = ChartFactory.createPieChart(title + ": " + name, dataset);
+        JFreeChart pieChart = ChartFactory.createPieChart(title + ": " + name, dataset);
 
-        ChartPanel chPanel = new ChartPanel(messagesBarGraph);
+        ChartPanel chPanel = new ChartPanel(pieChart);
         chPanel.setPreferredSize(new Dimension(600, 350));
         chPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 350));
         chPanel.setAlignmentX(Component.LEFT_ALIGNMENT);

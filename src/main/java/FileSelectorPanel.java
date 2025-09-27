@@ -3,11 +3,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class FileSelectorPanel extends JPanel {
 
     private JLabel statusLabel;
-    private String selectedFile;
+    private File selectedFile;
 
     public FileSelectorPanel() {
 
@@ -30,7 +31,7 @@ public class FileSelectorPanel extends JPanel {
                 int r = fileChooser.showOpenDialog(null);
 
                 if (r == JFileChooser.APPROVE_OPTION) {
-                    selectedFile = fileChooser.getSelectedFile().getAbsolutePath();
+                    selectedFile = fileChooser.getSelectedFile();
                     statusLabel.setText(fileChooser.getSelectedFile().getName());
                 }
             }
@@ -43,7 +44,7 @@ public class FileSelectorPanel extends JPanel {
         add(statusLabel);
     }
 
-    public String getSelectedFile() {
+    public File getSelectedFile() {
         return selectedFile;
     }
 }
