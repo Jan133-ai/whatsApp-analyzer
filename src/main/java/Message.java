@@ -12,12 +12,14 @@ public class Message {
         this.text = text;
         this.sender = sender;
         this.dateTime = dateTime;
-        wordsv = text.split(" ");
+        this.wordsv = text.split(" ");
         this.words = wordsv.length;
     }
 
     public void appendMessage(String message) {
         this.text = text.concat(message);
+        this.wordsv = text.split(" ");
+        this.words = wordsv.length;
     }
 
     public LocalDateTime getDateTime() {

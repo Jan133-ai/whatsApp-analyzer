@@ -6,8 +6,6 @@ import org.jfree.data.general.DefaultPieDataset;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
@@ -44,31 +42,25 @@ public class AnalyticsPanel extends JPanel {
 
         add(buttonsPanel);
 
-        radioButtonBar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                chartPanel.removeAll();
+        radioButtonBar.addActionListener(e -> {
+            chartPanel.removeAll();
 
-                Map<String, Integer> messageResults = currentChatInfo.callMessages(false, "", "0");
-                Map<String, Integer> wordsResults = currentChatInfo.callWords(false, "", "0");
+            Map<String, Integer> messageResults = currentChatInfo.callMessages(null, null, null);
+            Map<String, Integer> wordsResults = currentChatInfo.callWords(null, null, null);
 
-                addBarGraphFromMap(messageResults, "Messages", chartPanel);
-                addBarGraphFromMap(wordsResults, "Words", chartPanel);
-            }
+            addBarGraphFromMap(messageResults, "Messages", chartPanel);
+            addBarGraphFromMap(wordsResults, "Words", chartPanel);
         });
 
 
-        radioButtonPie.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                chartPanel.removeAll();
+        radioButtonPie.addActionListener(e -> {
+            chartPanel.removeAll();
 
-                Map<String, Integer> messageResults = currentChatInfo.callMessages(false, "", "0");
-                Map<String, Integer> wordsResults = currentChatInfo.callWords(false, "", "0");
+            Map<String, Integer> messageResults = currentChatInfo.callMessages(null, null, null);
+            Map<String, Integer> wordsResults = currentChatInfo.callWords(null, null, null);
 
-                addPieChartFromMap(messageResults, "Messages", chartPanel);
-                addPieChartFromMap(wordsResults, "Words", chartPanel);
-            }
+            addPieChartFromMap(messageResults, "Messages", chartPanel);
+            addPieChartFromMap(wordsResults, "Words", chartPanel);
         });
 
         chartPanel = new JPanel();
@@ -76,9 +68,9 @@ public class AnalyticsPanel extends JPanel {
 
 
         currentChatInfo = new ChatInfo(file);
-        Map<String, Integer> messageResults = currentChatInfo.callMessages(false, "", "0");
-        Map<String, Integer> wordsResults = currentChatInfo.callWords(false, "", "0");
-        Map<String, Float> wordsPerMessageResults = currentChatInfo.callWordsPerMessage(false, "", "0");
+        Map<String, Integer> messageResults = currentChatInfo.callMessages(null, null, null);
+        Map<String, Integer> wordsResults = currentChatInfo.callWords(null, null, null);
+        Map<String, Float> wordsPerMessageResults = currentChatInfo.callWordsPerMessage(null, null, null);
 
         addBarGraphFromMap(messageResults, "Messages", chartPanel);
         addBarGraphFromMap(wordsResults, "Words", chartPanel);
