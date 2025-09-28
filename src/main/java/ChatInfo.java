@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.NumberFormatException;
-import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -88,7 +87,7 @@ public class ChatInfo {
                 && !text.contains("Nachrichten und Anrufe sind Ende-zu-Ende-verschlüsselt.");
     }
 
-    private List<Message> filterMessagesByChatter(String name, List<Message> messageList) {
+    private List<Message> getMessagesByChatter(String name, List<Message> messageList) {
         List<Message> listByChatter = new LinkedList<>();
         if (!chatterSet.contains(name)) {
             return listByChatter;
@@ -102,101 +101,8 @@ public class ChatInfo {
         return listByChatter;
     }
 
-    // if day = 0 -> all days in month; if day = 0 and month = 0 -> all days in year
-    private List<Message> filterMessagesByDate(String dateString, List<Message> messageList) throws NumberFormatException{
-        if (dateString == null) {
-            return messageList;
-        }
-        List<Message> listByDate = new LinkedList<>();
-
-        int year = 0;
-        int month = 0;
-        int day = 0;
-
-        String[] date = dateString.split("[.]");
-        if (date.length == 3) {
-            day = Integer.parseInt(date[0]);
-            month = Integer.parseInt(date[1]);
-            year = Integer.parseInt(date[2]);
-        }
-        else if (date.length == 2) {
-            month = Integer.parseInt(date[0]);
-            year = Integer.parseInt(date[1]);
-        }
-        else if (date.length == 1) {
-            year = Integer.parseInt(date[0]);
-        }
-
-        for (Message message : messageList) {
-            if ((message.getDateTime().getYear() == year && message.getDateTime().getMonth().getValue() == month 
-            && message.getDateTime().getDayOfMonth() == day)
-            || (message.getDateTime().getYear() == year && message.getDateTime().getMonth().getValue() == month && day == 0)
-            || (message.getDateTime().getYear() == year && month == 0 && day == 0)) {
-                listByDate.add(message);
-            }
-        }
-        return listByDate;
-    }
-
-    // if second = -1 -> all seconds in minute; if second = -1 and minute = -1 -> all minutes in hour
-    private List<Message> filterMessagesByTime(String timeString, List<Message> messageList) throws NumberFormatException {
-        if (timeString == null) {
-            return messageList;
-        }
-        List<Message> listByTime = new LinkedList<>();
-
-        int hour = -1;
-        int minute = -1;
-        int second = -1;
-
-        String[] time = timeString.split(":");
-        if (time.length == 3) {
-            hour = Integer.parseInt(time[0]);
-            minute = Integer.parseInt(time[1]);
-            second = Integer.parseInt(time[2]);
-        }
-        else if (time.length == 2) {
-            hour = Integer.parseInt(time[0]);
-            minute = Integer.parseInt(time[1]);
-        }
-        else if (time.length == 1) {
-            hour = Integer.parseInt(time[0]);
-        }
-
-        for (Message message : messageList) {
-            if ((message.getDateTime().getHour() == hour && message.getDateTime().getMinute() == minute
-                    && message.getDateTime().getSecond() == second)
-                    || (message.getDateTime().getHour() == hour && message.getDateTime().getMinute() == minute && second == -1)
-                    || (message.getDateTime().getHour() == hour && minute == -1 && second == -1)) {
-                listByTime.add(message);
-            }
-        }
-        return listByTime;
-    }
-
-    private List<Message> filterMessagesByWeekday(DayOfWeek weekday, List<Message> messageList) {
-        if (weekday == null) {
-            return messageList;
-        }
-        List<Message> listByWeekday = new LinkedList<>();
-
-        for (Message message : messageList) {
-            if (message.getDateTime().getDayOfWeek() == weekday) {
-                listByWeekday.add(message);
-            }
-        }
-        return listByWeekday;
-    }
-
-    private List<Message> filterList(String dateString, String timeString, DayOfWeek weekday) {
-        List<Message> filteredList = filterMessagesByDate(dateString, messageListGes);
-        filteredList = filterMessagesByTime(timeString, filteredList);
-        filteredList = filterMessagesByWeekday(weekday, filteredList);
-        return filteredList;
-    }
-
-    public Map<String, Integer> callMessages(String dateString, String timeString, DayOfWeek weekday) throws NumberFormatException {
-        List<Message> filteredList = filterList(dateString, timeString, weekday);
+    public Map<String, Integer> callMessages(MessageListFilter filter) throws NumberFormatException {
+        List<Message> filteredList = filter.filterList(messageListGes);
 
         Map<String, Integer> results = new HashMap<>();
 
@@ -205,14 +111,14 @@ public class ChatInfo {
         results.put("Total", gesMessageNum);
 
         for (String sender : chatterSet) {
-            int senderMessageNum = filterMessagesByChatter(sender, filteredList).size();
+            int senderMessageNum = getMessagesByChatter(sender, filteredList).size();
             results.put(sender, senderMessageNum);
         }
         return results;
     }
 
-    public Map<String, Integer> callWords(String dateString, String timeString, DayOfWeek weekday) throws NumberFormatException {
-        List<Message> filteredList = filterList(dateString, timeString, weekday);
+    public Map<String, Integer> callWords(MessageListFilter filter) throws NumberFormatException {
+        List<Message> filteredList = filter.filterList(messageListGes);
 
         Map<String, Integer> results = new HashMap<>();
 
@@ -224,7 +130,7 @@ public class ChatInfo {
 
         for (String sender : chatterSet) {
             int wordsChatter = 0;
-            for (Message message : filterMessagesByChatter(sender, filteredList)) {
+            for (Message message : getMessagesByChatter(sender, filteredList)) {
                 wordsChatter += message.getWords();
             }
             results.put(sender, wordsChatter);
@@ -232,8 +138,8 @@ public class ChatInfo {
         return results;
     }
 
-    public Map<String, Float> callWordsPerMessage(String dateString, String timeString, DayOfWeek weekday) throws NumberFormatException {
-        List<Message> filteredList = filterList(dateString, timeString, weekday);
+    public Map<String, Float> callWordsPerMessage(MessageListFilter filter) throws NumberFormatException {
+        List<Message> filteredList = filter.filterList(messageListGes);
 
         Map<String, Float> results = new HashMap<>();
 
@@ -251,11 +157,11 @@ public class ChatInfo {
 
         for (String sender : chatterSet) {
             int wordsChatter = 0;
-            for (Message message : filterMessagesByChatter(sender, filteredList)) {
+            for (Message message : getMessagesByChatter(sender, filteredList)) {
                 wordsChatter += message.getWords();
             }
-            if (!filterMessagesByChatter(sender, filteredList).isEmpty()) {
-                results.put(sender, ((float)(wordsChatter) / filterMessagesByChatter(sender, filteredList).size()));
+            if (!getMessagesByChatter(sender, filteredList).isEmpty()) {
+                results.put(sender, ((float)(wordsChatter) / getMessagesByChatter(sender, filteredList).size()));
             }
             else {
                 results.put(sender, (float)0);
@@ -264,8 +170,8 @@ public class ChatInfo {
         return results;
     }
 
-    public Map<String, Integer> callDigga(String dateString, String timeString, DayOfWeek weekday) throws NumberFormatException {
-        List<Message> filteredList = filterList(dateString, timeString, weekday);
+    public Map<String, Integer> callDigga(MessageListFilter filter) throws NumberFormatException {
+        List<Message> filteredList = filter.filterList(messageListGes);
 
         Map<String, Integer> results = new HashMap<>();
 
@@ -277,7 +183,7 @@ public class ChatInfo {
 
         for (String sender : chatterSet) {
             int diggaChatter = 0;
-            for (Message message : filterMessagesByChatter(sender, filteredList)) {
+            for (Message message : getMessagesByChatter(sender, filteredList)) {
                 diggaChatter += message.getDigga();
             }
             results.put(sender, diggaChatter);

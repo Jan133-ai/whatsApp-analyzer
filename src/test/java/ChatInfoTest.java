@@ -15,6 +15,7 @@ public class ChatInfoTest {
 
     static ChatInfo chatInfo1;
     static ChatInfo chatInfo2;
+    static MessageListFilter nullFilter;
 
     @BeforeAll
     static public void constructChatInfo() throws URISyntaxException, FileNotFoundException {
@@ -29,203 +30,205 @@ public class ChatInfoTest {
         File chat2 = new File(resource2.toURI());
         chatInfo2 = new ChatInfo(chat2);
         assertNotNull(chatInfo2);
+
+        nullFilter = new MessageListFilter(null, null, null);
     }
 
     @Test
     public void testMessages() {
-        Map<String, Integer> results = chatInfo1.callMessages(null, null, null);
+        Map<String, Integer> results = chatInfo1.callMessages(nullFilter);
         assertNotNull(results);
-        assertEquals(results.get("Alice"), 3);
-        assertEquals(results.get("Bob"), 2);
-        assertEquals(results.get("Total"), 5);
+        assertEquals(3, results.get("Alice"));
+        assertEquals(2, results.get("Bob"));
+        assertEquals(5, results.get("Total"));
     }
 
     @Test
     public void testMessagesDateFilter() {
-        Map<String, Integer> resultsDay = chatInfo1.callMessages("21.09.2025", null, null);
+        Map<String, Integer> resultsDay = chatInfo1.callMessages(new MessageListFilter("21.09.2025", null, null));
         assertNotNull(resultsDay);
-        assertEquals(resultsDay.get("Alice"), 2);
-        assertEquals(resultsDay.get("Bob"), 1);
-        assertEquals(resultsDay.get("Total"), 3);
+        assertEquals(2, resultsDay.get("Alice"));
+        assertEquals(1, resultsDay.get("Bob"));
+        assertEquals(3, resultsDay.get("Total"));
 
-        Map<String, Integer> resultsDay2 = chatInfo1.callMessages("23.09.2025", null, null);
+        Map<String, Integer> resultsDay2 = chatInfo1.callMessages(new MessageListFilter("23.09.2025", null, null));
         assertNotNull(resultsDay);
-        assertEquals(resultsDay2.get("Alice"), 0);
-        assertEquals(resultsDay2.get("Bob"), 0);
-        assertEquals(resultsDay2.get("Total"), 0);
+        assertEquals(0, resultsDay2.get("Alice"));
+        assertEquals(0, resultsDay2.get("Bob"));
+        assertEquals(0, resultsDay2.get("Total"));
 
-        Map<String, Integer> resultsMonth = chatInfo2.callMessages("03.2021", null, null);
+        Map<String, Integer> resultsMonth = chatInfo2.callMessages(new MessageListFilter("03.2021", null, null));
         assertNotNull(resultsMonth);
-        assertEquals(resultsMonth.get("Alice"), 2);
-        assertEquals(resultsMonth.get("Bob"), 2);
-        assertEquals(resultsMonth.get("Total"), 4);
+        assertEquals(2, resultsMonth.get("Alice"));
+        assertEquals(2, resultsMonth.get("Bob"));
+        assertEquals(4, resultsMonth.get("Total"));
 
-        Map<String, Integer> resultsYear = chatInfo2.callMessages("2025", null, null);
+        Map<String, Integer> resultsYear = chatInfo2.callMessages(new MessageListFilter("2025", null, null));
         assertNotNull(resultsYear);
-        assertEquals(resultsYear.get("Alice"), 2);
-        assertEquals(resultsYear.get("Bob"), 1);
-        assertEquals(resultsYear.get("Total"), 3);
+        assertEquals(2, resultsYear.get("Alice"));
+        assertEquals(1, resultsYear.get("Bob"));
+        assertEquals(3, resultsYear.get("Total"));
     }
 
     @Test
     public void testMessagesTimeFilter() {
-        Map<String, Integer> resultsSecond = chatInfo2.callMessages(null, "07:55:44", null);
+        Map<String, Integer> resultsSecond = chatInfo2.callMessages(new MessageListFilter(null, "07:55:44", null));
         assertNotNull(resultsSecond);
-        assertEquals(resultsSecond.get("Alice"), 1);
-        assertEquals(resultsSecond.get("Bob"), 0);
-        assertEquals(resultsSecond.get("Total"), 1);
+        assertEquals(1, resultsSecond.get("Alice"));
+        assertEquals(0, resultsSecond.get("Bob"));
+        assertEquals(1, resultsSecond.get("Total"));
 
-        Map<String, Integer> resultsMinute = chatInfo2.callMessages(null, "08:15", null);
+        Map<String, Integer> resultsMinute = chatInfo2.callMessages(new MessageListFilter(null, "08:15", null));
         assertNotNull(resultsMinute);
-        assertEquals(resultsMinute.get("Alice"), 1);
-        assertEquals(resultsMinute.get("Bob"), 1);
-        assertEquals(resultsMinute.get("Total"), 2);
+        assertEquals(1, resultsMinute.get("Alice"));
+        assertEquals(1, resultsMinute.get("Bob"));
+        assertEquals(2, resultsMinute.get("Total"));
 
-        Map<String, Integer> resultsHour = chatInfo2.callMessages(null, "8", null);
+        Map<String, Integer> resultsHour = chatInfo2.callMessages(new MessageListFilter(null, "8", null));
         assertNotNull(resultsHour);
-        assertEquals(resultsHour.get("Alice"), 4);
-        assertEquals(resultsHour.get("Bob"), 3);
-        assertEquals(resultsHour.get("Total"), 7);
+        assertEquals(4, resultsHour.get("Alice"));
+        assertEquals(3, resultsHour.get("Bob"));
+        assertEquals(7, resultsHour.get("Total"));
     }
 
     @Test
     public void testMessageWeekdayFilter() {
-        Map<String, Integer> resultsFriday = chatInfo2.callMessages(null, null, DayOfWeek.FRIDAY);
+        Map<String, Integer> resultsFriday = chatInfo2.callMessages(new MessageListFilter(null, null, DayOfWeek.FRIDAY));
         assertNotNull(resultsFriday);
-        assertEquals(resultsFriday.get("Alice"), 1);
-        assertEquals(resultsFriday.get("Bob"), 1);
-        assertEquals(resultsFriday.get("Total"), 2);
+        assertEquals(1, resultsFriday.get("Alice"));
+        assertEquals(1, resultsFriday.get("Bob"));
+        assertEquals(2, resultsFriday.get("Total"));
     }
 
     @Test
     public void testWords() {
-        Map<String, Integer> results = chatInfo1.callWords(null, null, null);
+        Map<String, Integer> results = chatInfo1.callWords(nullFilter);
         assertNotNull(results);
-        assertEquals(results.get("Alice"), 10);
-        assertEquals(results.get("Bob"), 6);
-        assertEquals(results.get("Total"), 16);
+        assertEquals(10, results.get("Alice"));
+        assertEquals(6, results.get("Bob"));
+        assertEquals(16, results.get("Total"));
     }
 
     @Test
     public void testWordsDateFilter() {
-        Map<String, Integer> resultsDay = chatInfo1.callWords("21.09.2025", null, null);
+        Map<String, Integer> resultsDay = chatInfo1.callWords(new MessageListFilter("21.09.2025", null, null));
         assertNotNull(resultsDay);
-        assertEquals(resultsDay.get("Alice"), 6);
-        assertEquals(resultsDay.get("Bob"), 3);
-        assertEquals(resultsDay.get("Total"), 9);
+        assertEquals(6, resultsDay.get("Alice"));
+        assertEquals(3, resultsDay.get("Bob"));
+        assertEquals(9, resultsDay.get("Total"));
 
-        Map<String, Integer> resultsDay2 = chatInfo1.callWords("23.09.2025", null, null);
+        Map<String, Integer> resultsDay2 = chatInfo1.callWords(new MessageListFilter("23.09.2025", null, null));
         assertNotNull(resultsDay);
-        assertEquals(resultsDay2.get("Alice"), 0);
-        assertEquals(resultsDay2.get("Bob"), 0);
-        assertEquals(resultsDay2.get("Total"), 0);
+        assertEquals(0, resultsDay2.get("Alice"));
+        assertEquals(0, resultsDay2.get("Bob"));
+        assertEquals(0, resultsDay2.get("Total"));
 
-        Map<String, Integer> resultsMonth = chatInfo2.callWords("03.2021", null, null);
+        Map<String, Integer> resultsMonth = chatInfo2.callWords(new MessageListFilter("03.2021", null, null));
         assertNotNull(resultsMonth);
-        assertEquals(resultsMonth.get("Alice"), 8);
-        assertEquals(resultsMonth.get("Bob"), 10);
-        assertEquals(resultsMonth.get("Total"), 18);
+        assertEquals(8, resultsMonth.get("Alice"));
+        assertEquals(10, resultsMonth.get("Bob"));
+        assertEquals(18, resultsMonth.get("Total"));
 
-        Map<String, Integer> resultsYear = chatInfo2.callWords("2025", null, null);
+        Map<String, Integer> resultsYear = chatInfo2.callWords(new MessageListFilter("2025", null, null));
         assertNotNull(resultsYear);
-        assertEquals(resultsYear.get("Alice"), 18);
-        assertEquals(resultsYear.get("Bob"), 6);
-        assertEquals(resultsYear.get("Total"), 24);
+        assertEquals(18, resultsYear.get("Alice"));
+        assertEquals(6, resultsYear.get("Bob"));
+        assertEquals(24, resultsYear.get("Total"));
     }
 
     @Test
     public void testWordsTimeFilter() {
-        Map<String, Integer> resultsSecond = chatInfo2.callWords(null, "07:55:44", null);
+        Map<String, Integer> resultsSecond = chatInfo2.callWords(new MessageListFilter(null, "07:55:44", null));
         assertNotNull(resultsSecond);
-        assertEquals(resultsSecond.get("Alice"), 6);
-        assertEquals(resultsSecond.get("Bob"), 0);
-        assertEquals(resultsSecond.get("Total"), 6);
+        assertEquals(6, resultsSecond.get("Alice"));
+        assertEquals(0, resultsSecond.get("Bob"));
+        assertEquals(6, resultsSecond.get("Total"));
 
-        Map<String, Integer> resultsMinute = chatInfo2.callWords(null, "08:15", null);
+        Map<String, Integer> resultsMinute = chatInfo2.callWords(new MessageListFilter(null, "08:15", null));
         assertNotNull(resultsMinute);
-        assertEquals(resultsMinute.get("Alice"), 3);
-        assertEquals(resultsMinute.get("Bob"), 7);
-        assertEquals(resultsMinute.get("Total"), 10);
+        assertEquals(3, resultsMinute.get("Alice"));
+        assertEquals(7, resultsMinute.get("Bob"));
+        assertEquals(10, resultsMinute.get("Total"));
 
-        Map<String, Integer> resultsHour = chatInfo2.callWords(null, "8", null);
+        Map<String, Integer> resultsHour = chatInfo2.callWords(new MessageListFilter(null, "8", null));
         assertNotNull(resultsHour);
-        assertEquals(resultsHour.get("Alice"), 16);
-        assertEquals(resultsHour.get("Bob"), 17);
-        assertEquals(resultsHour.get("Total"), 33);
+        assertEquals(16, resultsHour.get("Alice"));
+        assertEquals(17, resultsHour.get("Bob"));
+        assertEquals(33, resultsHour.get("Total"));
     }
 
     @Test
     public void testWordsWeekdayFilter() {
-        Map<String, Integer> resultsWednesday = chatInfo2.callWords(null, null, DayOfWeek.WEDNESDAY);
+        Map<String, Integer> resultsWednesday = chatInfo2.callWords(new MessageListFilter(null, null, DayOfWeek.WEDNESDAY));
         assertNotNull(resultsWednesday);
-        assertEquals(resultsWednesday.get("Alice"), 15); //Messages:3
-        assertEquals(resultsWednesday.get("Bob"), 14); //Messages:3
-        assertEquals(resultsWednesday.get("Total"), 29);
+        assertEquals(15, resultsWednesday.get("Alice")); //Messages:3
+        assertEquals(14, resultsWednesday.get("Bob")); //Messages:3
+        assertEquals(29, resultsWednesday.get("Total"));
     }
 
     @Test
     public void testWordsPerMessage() {
-        Map<String, Float> results = chatInfo1.callWordsPerMessage(null, null, null);
+        Map<String, Float> results = chatInfo1.callWordsPerMessage(nullFilter);
         assertNotNull(results);
-        assertEquals(results.get("Alice"), (float) 10.0/3);
-        assertEquals(results.get("Bob"), (float) 6.0/2);
-        assertEquals(results.get("Total"), (float) 16.0/5);
+        assertEquals((float) 10.0/3, results.get("Alice"));
+        assertEquals((float) 6.0/2, results.get("Bob"));
+        assertEquals((float) 16.0/5, results.get("Total"));
     }
 
     @Test
     public void testWordsPerMessageDateFilter() {
-        Map<String, Float> resultsDay = chatInfo1.callWordsPerMessage("21.09.2025", null, null);
+        Map<String, Float> resultsDay = chatInfo1.callWordsPerMessage(new MessageListFilter("21.09.2025", null, null));
         assertNotNull(resultsDay);
-        assertEquals(resultsDay.get("Alice"), (float) 6.0/2);
-        assertEquals(resultsDay.get("Bob"), (float) 3);
-        assertEquals(resultsDay.get("Total"), (float) 9.0/3);
+        assertEquals((float) 6.0/2, resultsDay.get("Alice"));
+        assertEquals((float) 3, resultsDay.get("Bob"));
+        assertEquals((float) 9.0/3, resultsDay.get("Total"));
 
-        Map<String, Float> resultsDay2 = chatInfo1.callWordsPerMessage("23.09.2025", null, null);
+        Map<String, Float> resultsDay2 = chatInfo1.callWordsPerMessage(new MessageListFilter("23.09.2025", null, null));
         assertNotNull(resultsDay2);
-        assertEquals(resultsDay2.get("Alice"), (float) 0);
-        assertEquals(resultsDay2.get("Bob"), (float) 0);
-        assertEquals(resultsDay2.get("Total"), (float) 0);
+        assertEquals((float) 0, resultsDay2.get("Alice"));
+        assertEquals((float) 0, resultsDay2.get("Bob"));
+        assertEquals((float) 0, resultsDay2.get("Total"));
 
-        Map<String, Float> resultsMonth = chatInfo2.callWordsPerMessage("03.2021", null, null);
+        Map<String, Float> resultsMonth = chatInfo2.callWordsPerMessage(new MessageListFilter("03.2021", null, null));
         assertNotNull(resultsMonth);
-        assertEquals(resultsMonth.get("Alice"), (float) 4);
-        assertEquals(resultsMonth.get("Bob"), (float) 5);
-        assertEquals(resultsMonth.get("Total"), (float) 18.0/4);
+        assertEquals((float) 4, resultsMonth.get("Alice"));
+        assertEquals((float) 5, resultsMonth.get("Bob"));
+        assertEquals((float) 18.0/4, resultsMonth.get("Total"));
 
-        Map<String, Float> resultsYear = chatInfo2.callWordsPerMessage("2025", null, null);
+        Map<String, Float> resultsYear = chatInfo2.callWordsPerMessage(new MessageListFilter("2025", null, null));
         assertNotNull(resultsYear);
-        assertEquals(resultsYear.get("Alice"), (float) 9);
-        assertEquals(resultsYear.get("Bob"), (float) 6);
-        assertEquals(resultsYear.get("Total"), (float) 24.0/3);
+        assertEquals((float) 9, resultsYear.get("Alice"));
+        assertEquals((float) 6, resultsYear.get("Bob"));
+        assertEquals((float) 24.0/3, resultsYear.get("Total"));
     }
 
     @Test
     public void testWordsPerMessageTimeFilter() {
-        Map<String, Float> resultsSecond = chatInfo2.callWordsPerMessage(null, "07:55:44", null);
+        Map<String, Float> resultsSecond = chatInfo2.callWordsPerMessage(new MessageListFilter(null, "07:55:44", null));
         assertNotNull(resultsSecond);
-        assertEquals(resultsSecond.get("Alice"), (float) 6);
-        assertEquals(resultsSecond.get("Bob"), (float) 0);
-        assertEquals(resultsSecond.get("Total"), (float) 6);
+        assertEquals((float) 6, resultsSecond.get("Alice"));
+        assertEquals((float) 0, resultsSecond.get("Bob"));
+        assertEquals((float) 6, resultsSecond.get("Total"));
 
-        Map<String, Float> resultsMinute = chatInfo2.callWordsPerMessage(null, "08:15", null);
+        Map<String, Float> resultsMinute = chatInfo2.callWordsPerMessage(new MessageListFilter(null, "08:15", null));
         assertNotNull(resultsMinute);
-        assertEquals(resultsMinute.get("Alice"), (float) 3);
-        assertEquals(resultsMinute.get("Bob"), (float) 7);
-        assertEquals(resultsMinute.get("Total"), (float) 5);
+        assertEquals((float) 3, resultsMinute.get("Alice"));
+        assertEquals((float) 7, resultsMinute.get("Bob"));
+        assertEquals((float) 5, resultsMinute.get("Total"));
 
-        Map<String, Float> resultsHour = chatInfo2.callWordsPerMessage(null, "8", null);
+        Map<String, Float> resultsHour = chatInfo2.callWordsPerMessage(new MessageListFilter(null, "8", null));
         assertNotNull(resultsHour);
-        assertEquals(resultsHour.get("Alice"), (float) 4);
-        assertEquals(resultsHour.get("Bob"), (float) 17.0/3);
-        assertEquals(resultsHour.get("Total"), (float) 33.0/7);
+        assertEquals((float) 4, resultsHour.get("Alice"));
+        assertEquals((float) 17.0/3, resultsHour.get("Bob"));
+        assertEquals((float) 33.0/7, resultsHour.get("Total"));
     }
 
     @Test
     public void testWordsPerMessageWeekdayFilter() {
-        Map<String, Float> resultsWednesday = chatInfo2.callWordsPerMessage(null, null, DayOfWeek.WEDNESDAY);
+        Map<String, Float> resultsWednesday = chatInfo2.callWordsPerMessage(new MessageListFilter(null, null, DayOfWeek.WEDNESDAY));
         assertNotNull(resultsWednesday);
-        assertEquals(resultsWednesday.get("Alice"), (float) 5);
-        assertEquals(resultsWednesday.get("Bob"), (float) 14.0/3);
-        assertEquals(resultsWednesday.get("Total"), (float) 29.0/6);
+        assertEquals((float) 5, resultsWednesday.get("Alice"));
+        assertEquals((float) 14.0/3, resultsWednesday.get("Bob"));
+        assertEquals((float) 29.0/6, resultsWednesday.get("Total"));
     }
 }

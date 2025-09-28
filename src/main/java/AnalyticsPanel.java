@@ -14,10 +14,17 @@ public class AnalyticsPanel extends JPanel {
 
     JPanel chartPanel;
     ChatInfo currentChatInfo;
+    MessageListFilter nullFilter;
+
+    Map<String, Integer> messageResults;
+    Map<String, Integer> wordsResults;
+    Map<String, Float> wordsPerMessageResults;
 
     public AnalyticsPanel(File file) throws FileNotFoundException {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        nullFilter = new MessageListFilter(null, null, null);
 
         JLabel titleLabel = new JLabel("Overall Data");
         Font labelFont = titleLabel.getFont();
@@ -45,9 +52,6 @@ public class AnalyticsPanel extends JPanel {
         radioButtonBar.addActionListener(e -> {
             chartPanel.removeAll();
 
-            Map<String, Integer> messageResults = currentChatInfo.callMessages(null, null, null);
-            Map<String, Integer> wordsResults = currentChatInfo.callWords(null, null, null);
-
             addBarGraphFromMap(messageResults, "Messages", chartPanel);
             addBarGraphFromMap(wordsResults, "Words", chartPanel);
         });
@@ -55,9 +59,6 @@ public class AnalyticsPanel extends JPanel {
 
         radioButtonPie.addActionListener(e -> {
             chartPanel.removeAll();
-
-            Map<String, Integer> messageResults = currentChatInfo.callMessages(null, null, null);
-            Map<String, Integer> wordsResults = currentChatInfo.callWords(null, null, null);
 
             addPieChartFromMap(messageResults, "Messages", chartPanel);
             addPieChartFromMap(wordsResults, "Words", chartPanel);
@@ -68,9 +69,9 @@ public class AnalyticsPanel extends JPanel {
 
 
         currentChatInfo = new ChatInfo(file);
-        Map<String, Integer> messageResults = currentChatInfo.callMessages(null, null, null);
-        Map<String, Integer> wordsResults = currentChatInfo.callWords(null, null, null);
-        Map<String, Float> wordsPerMessageResults = currentChatInfo.callWordsPerMessage(null, null, null);
+        messageResults = currentChatInfo.callMessages(nullFilter);
+        wordsResults = currentChatInfo.callWords(nullFilter);
+        wordsPerMessageResults = currentChatInfo.callWordsPerMessage(nullFilter);
 
         addBarGraphFromMap(messageResults, "Messages", chartPanel);
         addBarGraphFromMap(wordsResults, "Words", chartPanel);
