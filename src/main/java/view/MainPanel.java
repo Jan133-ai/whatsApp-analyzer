@@ -1,9 +1,9 @@
 package view;
 
 import view.analyticsPanels.OverallPanel;
+import view.analyticsPanels.YearlyPanel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -14,6 +14,9 @@ public class MainPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         OverallPanel overallPanel = new OverallPanel(file);
-        add(overallPanel, BorderLayout.CENTER);
+        add(overallPanel);
+
+        YearlyPanel yearlyPanel = new YearlyPanel(file);
+        add(yearlyPanel);
     }
 }

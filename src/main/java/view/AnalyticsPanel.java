@@ -1,6 +1,5 @@
 package view;
 
-import controller.AnalyticsController;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -13,15 +12,12 @@ import java.util.Map;
 
 public abstract class AnalyticsPanel extends JPanel {
 
-    protected AnalyticsController analyticsController;
-
     @Override
     public Dimension getMaximumSize() {
         return new Dimension(Integer.MAX_VALUE, getPreferredSize().height);
     }
 
-    public <T extends Number> void addBarGraphFromMap(Map<String, T> map, String title, JPanel panel) {
-        String name = analyticsController.getName();
+    public <T extends Number> void addBarGraphFromMap(Map<String, T> map, String title, String name, JPanel panel) {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (Map.Entry<String, T> me : map.entrySet()) {
@@ -42,8 +38,7 @@ public abstract class AnalyticsPanel extends JPanel {
         panel.validate();
     }
 
-    public <T extends Number> void addPieChartFromMap(Map<String, T> map, String title, JPanel panel) {
-        String name = analyticsController.getName();
+    public <T extends Number> void addPieChartFromMap(Map<String, T> map, String title, String name, JPanel panel) {
 
         DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
         for (Map.Entry<String, T> me : map.entrySet()) {
