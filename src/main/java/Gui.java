@@ -1,3 +1,5 @@
+import view.MainWindow;
+
 import javax.swing.*;
 
 public class Gui {

@@ -1,3 +1,5 @@
+import model.ChatInfo;
+import model.MessageListFilter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

@@ -1,3 +1,5 @@
+package view;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -47,8 +49,8 @@ public class MainWindow extends JFrame implements ActionListener {
                 if (analyticsScrollPane != null) {
                     remove(analyticsScrollPane);
                 }
-                AnalyticsPanel analyticsPanel = new AnalyticsPanel(fileSelectorPanel.getSelectedFile());
-                analyticsScrollPane = new JScrollPane(analyticsPanel);
+                MainPanel mainPanel = new MainPanel(fileSelectorPanel.getSelectedFile());
+                analyticsScrollPane = new JScrollPane(mainPanel);
                 analyticsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
                 analyticsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                 analyticsScrollPane.getVerticalScrollBar().setUnitIncrement(10);
