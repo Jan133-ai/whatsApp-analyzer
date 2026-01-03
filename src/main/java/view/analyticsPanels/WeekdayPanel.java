@@ -19,34 +19,22 @@ public class WeekdayPanel extends AnalyticsPanel {
 
     public WeekdayPanel(File file) throws FileNotFoundException {
 
-        weekdayController = new WeekdayController(file);
+        super("Weekday Data");
 
         showPieChart = false;
 
+        weekdayController = new WeekdayController(file);
         String name = weekdayController.getName();
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        JLabel titleLabel = new JLabel("Weekday Data");
-        Font labelFont = titleLabel.getFont();
-        titleLabel.setFont(new Font(labelFont.getName(), Font.BOLD, 20));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        add(titleLabel);
+        Set<String> chatters = weekdayController.getChatters();
+        selectedChatters =  chatters;
 
         JRadioButton[] radioButtons = addPieBarChoice();
-
         JRadioButton radioButtonBar = radioButtons[0];
         JRadioButton radioButtonPie = radioButtons[1];
 
-
-
         JPanel chekBoxesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 8));
         chekBoxesPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        Set<String> chatters = weekdayController.getChatters();
-
-        selectedChatters =  chatters;
 
         JPanel chartPanel = new JPanel();
         chartPanel.setLayout(new GridLayout(0, 2, 0, 5));
@@ -57,9 +45,9 @@ public class WeekdayPanel extends AnalyticsPanel {
             showPieChart = false;
 
             addBarGraphFromMap(weekdayController.getWeekdaysMessages(selectedChatters),
-                    "Messages by Weekday", name, "Weekday", chartPanel);
+                    "Messages by Weekday", name, "Weekday", 1, chartPanel);
             addBarGraphFromMap(weekdayController.getWeekdaysWords(selectedChatters),
-                    "Messages by Weekday", name, "Weekday", chartPanel);
+                    "Words by Weekday", name, "Weekday", 1, chartPanel);
         });
 
         radioButtonPie.addActionListener(e -> {
@@ -70,7 +58,7 @@ public class WeekdayPanel extends AnalyticsPanel {
             addPieChartFromMap(weekdayController.getWeekdaysMessages(selectedChatters),
                     "Messages by Weekday", name, chartPanel);
             addPieChartFromMap(weekdayController.getWeekdaysWords(selectedChatters),
-                    "Messages by Weekday", name, chartPanel);
+                    "Words by Weekday", name, chartPanel);
         });
 
         for (String chatter : chatters) {
@@ -90,25 +78,24 @@ public class WeekdayPanel extends AnalyticsPanel {
                     addPieChartFromMap(weekdayController.getWeekdaysMessages(selectedChatters),
                             "Messages by Weekday", name, chartPanel);
                     addPieChartFromMap(weekdayController.getWeekdaysWords(selectedChatters),
-                            "Messages by Weekday", name, chartPanel);
+                            "Words by Weekday", name, chartPanel);
                 } else {
                     addBarGraphFromMap(weekdayController.getWeekdaysMessages(selectedChatters),
-                            "Messages by Weekday", name, "Weekday", chartPanel);
+                            "Messages by Weekday", name, "Weekday", 1, chartPanel);
                     addBarGraphFromMap(weekdayController.getWeekdaysWords(selectedChatters),
-                            "Messages by Weekday", name, "Weekday", chartPanel);
+                            "Words by Weekday", name, "Weekday", 1, chartPanel);
                 }
             });
 
             chekBoxesPanel.add(checkBox);
         }
 
-        add(chekBoxesPanel);
-
         addBarGraphFromMap(weekdayController.getWeekdaysMessages(selectedChatters),
-                "Messages by Weekday", name, "Weekday", chartPanel);
+                "Messages by Weekday", name, "Weekday", 1, chartPanel);
         addBarGraphFromMap(weekdayController.getWeekdaysWords(selectedChatters),
-                "Messages by Weekday", name, "Weekday", chartPanel);
+                "Words by Weekday", name, "Weekday", 1, chartPanel);
 
+        add(chekBoxesPanel);
         add(chartPanel);
     }
 

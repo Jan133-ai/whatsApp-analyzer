@@ -7,17 +7,31 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.Map;
 
 public abstract class AnalyticsPanel extends JPanel {
+
+    public AnalyticsPanel(String title) {
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        setBorder(new EmptyBorder(0, 0, 20, 0));
+
+        JLabel titleLabel = new JLabel(title);
+        Font labelFont = titleLabel.getFont();
+        titleLabel.setFont(new Font(labelFont.getName(), Font.BOLD, 20));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        add(titleLabel);
+    }
 
     @Override
     public Dimension getMaximumSize() {
         return new Dimension(Integer.MAX_VALUE, getPreferredSize().height);
     }
 
-    public <T extends Number> void addBarGraphFromMap(Map<String, T> map, String title, String name, String xLabel, JPanel panel) {
+    public <T extends Number> void addBarGraphFromMap(Map<String, T> map, String title, String name, String xLabel, int width, JPanel panel) {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (Map.Entry<String, T> me : map.entrySet()) {
@@ -28,9 +42,12 @@ public abstract class AnalyticsPanel extends JPanel {
 
         JFreeChart barChart = ChartFactory.createBarChart(title + ": " + name,
                 xLabel, title, dataset);
+        barChart.getCategoryPlot().setBackgroundPaint(Color.WHITE);
+        barChart.getCategoryPlot().setRangeGridlinesVisible(true);
+        barChart.getCategoryPlot().setRangeGridlinePaint(Color.BLACK);
 
         ChartPanel chPanel = new ChartPanel(barChart);
-        chPanel.setPreferredSize(new Dimension(500, 350));
+        chPanel.setPreferredSize(new Dimension(500 * width, 350));
         chPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 350));
         chPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -48,6 +65,7 @@ public abstract class AnalyticsPanel extends JPanel {
         }
 
         JFreeChart pieChart = ChartFactory.createPieChart(title + ": " + name, dataset);
+        pieChart.getCategoryPlot().setBackgroundPaint(Color.WHITE);
 
         ChartPanel chPanel = new ChartPanel(pieChart);
         chPanel.setPreferredSize(new Dimension(500, 350));

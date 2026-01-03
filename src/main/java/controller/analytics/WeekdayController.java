@@ -12,12 +12,8 @@ import java.util.Set;
 
 public class WeekdayController extends AnalyticsController {
 
-    private final Set<String> chatters;
-
     public WeekdayController(File file) throws FileNotFoundException {
         super(file);
-
-        chatters = currentChatInfo.getChatterSet();
     }
 
     public Map<String, Integer> getWeekdaysMessages(Set<String> selectedChatters) {
@@ -54,9 +50,5 @@ public class WeekdayController extends AnalyticsController {
         }
 
         return weekdaysWords;
-    }
-
-    public Set<String> getChatters() {
-        return chatters;
     }
 }
