@@ -17,7 +17,7 @@ public abstract class AnalyticsPanel extends JPanel {
         return new Dimension(Integer.MAX_VALUE, getPreferredSize().height);
     }
 
-    public <T extends Number> void addBarGraphFromMap(Map<String, T> map, String title, String name, JPanel panel) {
+    public <T extends Number> void addBarGraphFromMap(Map<String, T> map, String title, String name, String xLabel, JPanel panel) {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (Map.Entry<String, T> me : map.entrySet()) {
@@ -27,7 +27,7 @@ public abstract class AnalyticsPanel extends JPanel {
         }
 
         JFreeChart barChart = ChartFactory.createBarChart(title + ": " + name,
-                "Sender", title, dataset);
+                xLabel, title, dataset);
 
         ChartPanel chPanel = new ChartPanel(barChart);
         chPanel.setPreferredSize(new Dimension(500, 350));
@@ -56,5 +56,25 @@ public abstract class AnalyticsPanel extends JPanel {
 
         panel.add(chPanel);
         panel.validate();
+    }
+
+    public JRadioButton[] addPieBarChoice() {
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JRadioButton radioButtonBar = new JRadioButton("Bar Chart");
+        radioButtonBar.setSelected(true);
+        JRadioButton radioButtonPie = new JRadioButton("Pie Chart");
+
+        ButtonGroup choice = new ButtonGroup();
+        choice.add(radioButtonBar);
+        choice.add(radioButtonPie);
+
+        buttonsPanel.add(radioButtonBar);
+        buttonsPanel.add(radioButtonPie);
+
+        add(buttonsPanel);
+
+        return new JRadioButton[]{radioButtonBar, radioButtonPie};
     }
 }

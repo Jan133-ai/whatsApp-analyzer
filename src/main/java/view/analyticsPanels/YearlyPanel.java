@@ -59,29 +59,18 @@ public class YearlyPanel extends AnalyticsPanel {
                         "Words " + year.toString(), name, chartPanel);
             } else {
                 addBarGraphFromMap(yearlyController.getYearlyMessages(year),
-                        "Messages " + year.toString(), name, chartPanel);
+                        "Messages " + year.toString(), name, "Sender", chartPanel);
                 addBarGraphFromMap(yearlyController.getYearlyWords(year),
-                        "Words " + year.toString(), name, chartPanel);
+                        "Words " + year.toString(), name, "Sender", chartPanel);
             }
         });
 
         add(yearComboBox);
 
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JRadioButton[] radioButtons = addPieBarChoice();
 
-        JRadioButton radioButtonBar = new JRadioButton("Bar Chart");
-        radioButtonBar.setSelected(true);
-        JRadioButton radioButtonPie = new JRadioButton("Pie Chart");
-
-        ButtonGroup choice = new ButtonGroup();
-        choice.add(radioButtonBar);
-        choice.add(radioButtonPie);
-
-        buttonsPanel.add(radioButtonBar);
-        buttonsPanel.add(radioButtonPie);
-
-        add(buttonsPanel);
+        JRadioButton radioButtonBar = radioButtons[0];
+        JRadioButton radioButtonPie = radioButtons[1];
 
         radioButtonBar.addActionListener(e -> {
             chartPanel.removeAll();
@@ -89,9 +78,9 @@ public class YearlyPanel extends AnalyticsPanel {
             showPieCHart = false;
 
             addBarGraphFromMap(yearlyController.getYearlyMessages(selectedYear),
-                    "Messages " + selectedYear.toString(), name, chartPanel);
+                    "Messages " + selectedYear.toString(), name, "Sender", chartPanel);
             addBarGraphFromMap(yearlyController.getYearlyWords(selectedYear),
-                    "Words " + selectedYear.toString(), name, chartPanel);
+                    "Words " + selectedYear.toString(), name, "Sender", chartPanel);
         });
 
 
@@ -107,9 +96,9 @@ public class YearlyPanel extends AnalyticsPanel {
         });
 
         addBarGraphFromMap(yearlyController.getYearlyMessages(Year.now()),
-                "Messages  " + Year.now().toString(), name, chartPanel);
+                "Messages  " + Year.now().toString(), name, "Sender", chartPanel);
         addBarGraphFromMap(yearlyController.getYearlyWords(Year.now()),
-                "Words " + Year.now().toString(), name, chartPanel);
+                "Words " + Year.now().toString(), name, "Sender", chartPanel);
 
         add(chartPanel);
     }

@@ -1,6 +1,7 @@
 package view;
 
 import view.analyticsPanels.OverallPanel;
+import view.analyticsPanels.WeekdayPanel;
 import view.analyticsPanels.YearlyPanel;
 
 import javax.swing.*;
@@ -18,5 +19,8 @@ public class MainPanel extends JPanel {
 
         YearlyPanel yearlyPanel = new YearlyPanel(file);
         add(yearlyPanel);
+
+        WeekdayPanel weekdayPanel = new WeekdayPanel(file);
+        add(weekdayPanel);
     }
 }

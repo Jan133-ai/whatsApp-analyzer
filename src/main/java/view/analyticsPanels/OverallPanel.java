@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 public class OverallPanel extends AnalyticsPanel {
 
@@ -25,21 +26,10 @@ public class OverallPanel extends AnalyticsPanel {
 
         add(titleLabel);
 
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JRadioButton[] radioButtons = addPieBarChoice();
 
-        JRadioButton radioButtonBar = new JRadioButton("Bar Chart");
-        radioButtonBar.setSelected(true);
-        JRadioButton radioButtonPie = new JRadioButton("Pie Chart");
-
-        ButtonGroup choice = new ButtonGroup();
-        choice.add(radioButtonBar);
-        choice.add(radioButtonPie);
-
-        buttonsPanel.add(radioButtonBar);
-        buttonsPanel.add(radioButtonPie);
-
-        add(buttonsPanel);
+        JRadioButton radioButtonBar = radioButtons[0];
+        JRadioButton radioButtonPie = radioButtons[1];
 
         JPanel chartPanel = new JPanel();
         chartPanel.setLayout(new GridLayout(0, 2, 0, 5));
@@ -49,8 +39,8 @@ public class OverallPanel extends AnalyticsPanel {
         radioButtonBar.addActionListener(e -> {
             chartPanel.removeAll();
 
-            addBarGraphFromMap(overallController.getMessageResults(), "Messages", name, chartPanel);
-            addBarGraphFromMap(overallController.getWordsResults(), "Words", name, chartPanel);
+            addBarGraphFromMap(overallController.getMessageResults(), "Messages", name, "Sender", chartPanel);
+            addBarGraphFromMap(overallController.getWordsResults(), "Words", name, "Sender", chartPanel);
         });
 
 
@@ -61,13 +51,13 @@ public class OverallPanel extends AnalyticsPanel {
             addPieChartFromMap(overallController.getWordsResults(), "Words", name, chartPanel);
         });
 
-        addBarGraphFromMap(overallController.getMessageResults(), "Messages", name, chartPanel);
-        addBarGraphFromMap(overallController.getWordsResults(), "Words", name, chartPanel);
+        addBarGraphFromMap(overallController.getMessageResults(), "Messages", name, "Sender", chartPanel);
+        addBarGraphFromMap(overallController.getWordsResults(), "Words", name, "Sender", chartPanel);
 
         JPanel chartPanel2 = new JPanel();
         chartPanel2.setLayout(new GridLayout(0, 2, 0, 5));
 
-        addBarGraphFromMap(overallController.getWordsPerMessageResults(), "Words/Message", name, chartPanel2);
+        addBarGraphFromMap(overallController.getWordsPerMessageResults(), "Words/Message", name, "Sender", chartPanel2);
 
         add(chartPanel);
         add(chartPanel2);
