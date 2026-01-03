@@ -65,7 +65,7 @@ public abstract class AnalyticsPanel extends JPanel {
         }
 
         JFreeChart pieChart = ChartFactory.createPieChart(title + ": " + name, dataset);
-        pieChart.getCategoryPlot().setBackgroundPaint(Color.WHITE);
+        pieChart.getPlot().setBackgroundPaint(Color.WHITE);
 
         ChartPanel chPanel = new ChartPanel(pieChart);
         chPanel.setPreferredSize(new Dimension(500, 350));
