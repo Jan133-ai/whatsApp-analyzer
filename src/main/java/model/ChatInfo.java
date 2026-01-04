@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.NumberFormatException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -281,6 +282,28 @@ public class ChatInfo {
             }
         }
         return answers;
+    }
+
+    public LocalDate getMostRecentMessageDate() {
+        LocalDate mostRecentDate = LocalDate.MIN;
+
+        for (Message message : messageListGes) {
+            if (message.getDateTime().toLocalDate().isAfter(mostRecentDate)) {
+                mostRecentDate = message.getDateTime().toLocalDate();
+            }
+        }
+        return mostRecentDate;
+    }
+
+    public LocalDate getFirstMessageDate() {
+        LocalDate firstTime = LocalDate.MAX;
+
+        for (Message message : messageListGes) {
+            if (message.getDateTime().toLocalDate().isBefore(firstTime)) {
+                firstTime = message.getDateTime().toLocalDate();
+            }
+        }
+        return firstTime;
     }
 
     public Set<String> getChatterSet() {

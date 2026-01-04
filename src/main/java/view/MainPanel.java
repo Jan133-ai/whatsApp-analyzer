@@ -1,9 +1,6 @@
 package view;
 
-import view.analyticsPanels.OverallPanel;
-import view.analyticsPanels.TimePanel;
-import view.analyticsPanels.WeekdayPanel;
-import view.analyticsPanels.YearlyPanel;
+import view.analyticsPanels.*;
 
 import javax.swing.*;
 import java.io.File;
@@ -26,5 +23,8 @@ public class MainPanel extends JPanel {
 
         TimePanel timePanel = new TimePanel(file);
         add(timePanel);
+
+        ChangePanel changePanel = new ChangePanel(file);
+        add(changePanel);
     }
 }

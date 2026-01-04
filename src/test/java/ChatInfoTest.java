@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -232,5 +233,11 @@ public class ChatInfoTest {
         assertEquals((float) 5, resultsWednesday.get("Alice"));
         assertEquals((float) 14.0/3, resultsWednesday.get("Bob"));
         assertEquals((float) 29.0/6, resultsWednesday.get("Total"));
+    }
+
+    @Test
+    public void testMostRecentMessageDate() {
+        assertEquals(chatInfo1.getMostRecentMessageDate(), LocalDate.of(2025, 9, 21));
+        assertEquals(chatInfo2.getMostRecentMessageDate(), LocalDate.of(2025, 9, 27));
     }
 }
