@@ -4,26 +4,17 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.time.Month;
-import org.jfree.data.time.TimeSeries;
 import org.jfree.data.xy.DefaultXYDataset;
 import view.enums.TIMESPAN;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.text.FieldPosition;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.util.Date;
 import java.util.Map;
 
 public abstract class AnalyticsPanel extends JPanel {

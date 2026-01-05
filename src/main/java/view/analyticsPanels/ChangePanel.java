@@ -8,7 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 
 public class ChangePanel extends AnalyticsPanel {
@@ -21,6 +20,7 @@ public class ChangePanel extends AnalyticsPanel {
         changeController = new ChangeController(file);
 
         JPanel chartPanel = new JPanel();
+        JPanel chart2Panel = new JPanel();
 
         JComboBox<TIMESPAN> timespanComboBox = new JComboBox<>();
         for (TIMESPAN time : TIMESPAN.values()) {
@@ -31,9 +31,12 @@ public class ChangePanel extends AnalyticsPanel {
             TIMESPAN timespan = (TIMESPAN) cb.getSelectedItem();
 
             chartPanel.removeAll();
+            chart2Panel.removeAll();
 
-            addTimeSeriesChartFromMap(changeController.getMessageOverTimespan(timespan),
+            addTimeSeriesChartFromMap(changeController.getDataOverTimespan(timespan, true),
                     timespan, "Messages", chartPanel);
+            addTimeSeriesChartFromMap(changeController.getDataOverTimespan(timespan, false),
+                    timespan, "Words", chart2Panel);
         });
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -42,11 +45,14 @@ public class ChangePanel extends AnalyticsPanel {
 
         timespanComboBox.setMaximumSize(timespanComboBox.getPreferredSize());
 
-        addTimeSeriesChartFromMap(changeController.getMessageOverTimespan(TIMESPAN.LAST30DAYS),
+        addTimeSeriesChartFromMap(changeController.getDataOverTimespan(TIMESPAN.LAST30DAYS, true),
                 TIMESPAN.LAST30DAYS, "Messages", chartPanel);
+        addTimeSeriesChartFromMap(changeController.getDataOverTimespan(TIMESPAN.LAST30DAYS, false),
+                TIMESPAN.LAST30DAYS, "Words", chart2Panel);
 
         add(timespanComboBox);
         add(label);
         add(chartPanel);
+        add(chart2Panel);
     }
 }

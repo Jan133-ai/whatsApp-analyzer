@@ -25,14 +25,14 @@ public class ChangeController extends AnalyticsController {
         firstMessage = currentChatInfo.getFirstMessageDate();
     }
 
-    public Map<String, double[][]> getMessageOverTimespan(TIMESPAN timespan) {
+    public Map<String, double[][]> getDataOverTimespan(TIMESPAN timespan, boolean messagesBool) {
         Map<String, double[][]> messageOverTimespanMap = new HashMap<>();
         if (timespan == TIMESPAN.LAST30DAYS) {
             for (int i = 0; i < 30; i++) {
                 LocalDate date = mostRecentMessage.minusDays(i);
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                 String dateString = date.format(formatter);
-                addToMapFromDateString(dateString, messageOverTimespanMap, date, i, 30);
+                addToMapFromDateString(dateString, messageOverTimespanMap, date, i, 30, messagesBool);
             }
         } else if (timespan == TIMESPAN.LASTYEAR) {
             for (int i = 0; i < 12; i++) {
@@ -42,7 +42,7 @@ public class ChangeController extends AnalyticsController {
                 int year = date.getYear();
                 String monthString = String.valueOf(month) + "." + String.valueOf(year);
 
-                addToMapFromDateString(monthString, messageOverTimespanMap, date, i, 12);
+                addToMapFromDateString(monthString, messageOverTimespanMap, date, i, 12, messagesBool);
             }
         } else {
             int numberOfMonths = (int)ChronoUnit.MONTHS.between(firstMessage, mostRecentMessage);
@@ -54,7 +54,8 @@ public class ChangeController extends AnalyticsController {
                     int year = date.getYear();
                     String monthString = String.valueOf(month) + "." + String.valueOf(year);
 
-                    addToMapFromDateString(monthString, messageOverTimespanMap, date, i, numberOfMonths + 1);
+                    addToMapFromDateString(monthString, messageOverTimespanMap, date, i,
+                            numberOfMonths + 1, messagesBool);
                 }
             } else {
                 int numberOfYears = (int)ChronoUnit.YEARS.between(firstMessage, mostRecentMessage);
@@ -63,7 +64,8 @@ public class ChangeController extends AnalyticsController {
                             .minusDays(mostRecentMessage.getDayOfMonth() - 2);
                     String yearString = String.valueOf(date.getYear());
 
-                    addToMapFromDateString(yearString, messageOverTimespanMap, date, i, numberOfYears + 1);
+                    addToMapFromDateString(yearString, messageOverTimespanMap, date, i,
+                            numberOfYears + 1, messagesBool);
                 }
             }
         }
@@ -71,12 +73,18 @@ public class ChangeController extends AnalyticsController {
     }
 
     private void addToMapFromDateString(String dateString, Map<String, double[][]> messageOverTimespanMap,
-                                        LocalDate date, int i, int numberOfDataPoints) {
-        MessageListFilter monthFilter = new MessageListFilter(dateString, null, null);
+                                        LocalDate date, int i, int numberOfDataPoints, boolean messagesBool) {
+        MessageListFilter dateFilter = new MessageListFilter(dateString, null, null);
 
-        Map<String, Integer> messagesDate = currentChatInfo.callMessages(monthFilter);
+        Map<String, Integer> dateMap;
+        if (messagesBool) {
+            dateMap = currentChatInfo.callMessages(dateFilter);
+        } else {
+            dateMap = currentChatInfo.callWords(dateFilter);
+        }
 
-        for (Map.Entry<String, Integer> entry : messagesDate.entrySet()) {
+
+        for (Map.Entry<String, Integer> entry : dateMap.entrySet()) {
             if (!messageOverTimespanMap.containsKey(entry.getKey())) {
                 messageOverTimespanMap.put(entry.getKey(), new double[2][numberOfDataPoints]);
             }
