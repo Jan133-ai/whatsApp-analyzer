@@ -26,5 +26,8 @@ public class MainPanel extends JPanel {
 
         ChangePanel changePanel = new ChangePanel(file);
         add(changePanel);
+
+        NextSenderPanel nextSenderPanel = new NextSenderPanel(file);
+        add(nextSenderPanel);
     }
 }

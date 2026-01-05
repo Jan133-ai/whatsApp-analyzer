@@ -240,4 +240,17 @@ public class ChatInfoTest {
         assertEquals(chatInfo1.getMostRecentMessageDate(), LocalDate.of(2025, 9, 21));
         assertEquals(chatInfo2.getMostRecentMessageDate(), LocalDate.of(2025, 9, 27));
     }
+
+    @Test
+    public void testNextSender() {
+        Map<String, Map<String, Integer>> nextSendersMap = chatInfo1.getNextSenders();
+        assertNotNull(nextSendersMap);
+        assertEquals(2, nextSendersMap.get("Alice").get("Bob"));
+        assertEquals(2, nextSendersMap.get("Bob").get("Alice"));
+
+        Map<String, Map<String, Integer>> nextSendersMap2 = chatInfo2.getNextSenders();
+        assertNotNull(nextSendersMap2);
+        assertEquals(15, nextSendersMap2.get("Alice").get("Bob"));
+        assertEquals(4, nextSendersMap2.get("Bob").get("Bob"));
+    }
 }

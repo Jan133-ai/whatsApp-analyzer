@@ -44,7 +44,7 @@ public class MainWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String com = e.getActionCommand();
-        if (com.equals("Show Analytics")) {
+        if (com.equals("Show Analytics") && fileSelectorPanel.getSelectedFile() != null) {
             try {
                 if (analyticsScrollPane != null) {
                     remove(analyticsScrollPane);

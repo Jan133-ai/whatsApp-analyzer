@@ -306,6 +306,27 @@ public class ChatInfo {
         return firstTime;
     }
 
+    public Map<String, Map<String, Integer>> getNextSenders() {
+        Map<String, Map<String, Integer>> result = new HashMap<>();
+        String lastSender = null;
+
+        for (Message message : messageListGes) {
+            if (!result.containsKey(message.getSender())) {
+                result.put(message.getSender(), new HashMap<>());
+            }
+            if (lastSender != null) {
+                if (!result.get(lastSender).containsKey(message.getSender())) {
+                    result.get(lastSender).put(message.getSender(), 1);
+                } else {
+                    //result.get(lastSender).get(message.getSender()) = 12;
+                    result.get(lastSender).put(message.getSender(), result.get(lastSender).get(message.getSender()) + 1);
+                }
+            }
+            lastSender = message.getSender();
+        }
+        return result;
+    }
+
     public Set<String> getChatterSet() {
         return chatterSet;
     }
