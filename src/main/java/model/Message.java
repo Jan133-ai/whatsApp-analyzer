@@ -40,14 +40,14 @@ public class Message {
         return words;
     }
 
-    public int getDigga() {
-        int diggaCounter = 0;
+    public int searchWord(String searchedWord) {
+        int wordCounter = 0;
         for (String word : wordsv) {
             word = word.toLowerCase();
-            if (word.contains("digga") || word.contains("diggah") || word.contains("digger")) {
-                diggaCounter++;
+            if (word.equalsIgnoreCase(searchedWord)) {
+                wordCounter++;
             }
         }
-        return diggaCounter;
+        return wordCounter;
     }
 }

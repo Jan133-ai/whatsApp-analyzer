@@ -29,5 +29,8 @@ public class MainPanel extends JPanel {
 
         NextSenderPanel nextSenderPanel = new NextSenderPanel(file);
         add(nextSenderPanel);
+
+        WordSearchPanel wordSearchPanel = new WordSearchPanel(file);
+        add(wordSearchPanel);
     }
 }

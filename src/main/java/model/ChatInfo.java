@@ -42,7 +42,7 @@ public class ChatInfo {
         messageListGes = new LinkedList<>();
         chatterSet = new HashSet<>();
 
-        Scanner reader = new Scanner(file);
+        Scanner reader = new Scanner(this.file);
         while (reader.hasNextLine()) {
             String message = reader.nextLine();
             saveMessage(message);
@@ -173,23 +173,23 @@ public class ChatInfo {
         return results;
     }
 
-    public Map<String, Integer> callDigga(MessageListFilter filter) throws NumberFormatException {
+    public Map<String, Integer> callSearchWord(MessageListFilter filter, String searchedWord) throws NumberFormatException {
         List<Message> filteredList = filter.filterList(messageListGes);
 
         Map<String, Integer> results = new HashMap<>();
 
-        int diggaGes = 0;
+        int wordGes = 0;
         for (Message message : filteredList) {
-            diggaGes += message.getDigga();
+            wordGes += message.searchWord(searchedWord);
         }
-        results.put("Total", diggaGes);
+        results.put("Total", wordGes);
 
         for (String sender : chatterSet) {
-            int diggaChatter = 0;
+            int wordChatter = 0;
             for (Message message : getMessagesByChatter(sender, filteredList)) {
-                diggaChatter += message.getDigga();
+                wordChatter += message.searchWord(searchedWord);
             }
-            results.put(sender, diggaChatter);
+            results.put(sender, wordChatter);
         }
         return results;
     }
@@ -318,7 +318,6 @@ public class ChatInfo {
                 if (!result.get(lastSender).containsKey(message.getSender())) {
                     result.get(lastSender).put(message.getSender(), 1);
                 } else {
-                    //result.get(lastSender).get(message.getSender()) = 12;
                     result.get(lastSender).put(message.getSender(), result.get(lastSender).get(message.getSender()) + 1);
                 }
             }
