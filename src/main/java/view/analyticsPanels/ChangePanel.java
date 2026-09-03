@@ -27,8 +27,7 @@ public class ChangePanel extends AnalyticsPanel {
             timespanComboBox.addItem(time);
         }
         timespanComboBox.addActionListener(e -> {
-            JComboBox cb = (JComboBox)e.getSource();
-            TIMESPAN timespan = (TIMESPAN) cb.getSelectedItem();
+            TIMESPAN timespan = (TIMESPAN) timespanComboBox.getSelectedItem();
 
             chartPanel.removeAll();
             chart2Panel.removeAll();

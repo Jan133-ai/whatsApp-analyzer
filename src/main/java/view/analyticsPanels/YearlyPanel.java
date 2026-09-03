@@ -34,8 +34,7 @@ public class YearlyPanel extends AnalyticsPanel {
         yearComboBox.setMaximumSize(yearComboBox.getPreferredSize());
 
         yearComboBox.addActionListener(e -> {
-            JComboBox cb = (JComboBox)e.getSource();
-            Year year = (Year) cb.getSelectedItem();
+            Year year = (Year) yearComboBox.getSelectedItem();
 
             assert year != null;
             selectedYear = year;

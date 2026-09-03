@@ -46,6 +46,28 @@ public abstract class AnalyticsPanel extends JPanel {
             }
         }
 
+        addBarGraphFromDataset(dataset, title, name, xLabel, width, panel);
+    }
+
+    public <T extends Number> void addBarGraphFromLabelMap(Map<String, Map<String, T>> map, String title, String name, String xLabel, int width, JPanel panel) {
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (Map.Entry<String, Map<String, T>> outerMe : map.entrySet()) {
+            String label = outerMe.getKey();
+            Map<String, T> innerMap = outerMe.getValue();
+            for (Map.Entry<String, T> me : innerMap.entrySet()) {
+                if (!me.getKey().equals("Total")) {
+                    dataset.addValue(me.getValue(), me.getKey(), label);
+                }
+            }
+        }
+        
+
+        addBarGraphFromDataset(dataset, title, name, xLabel, width, panel);
+    }
+
+    private void addBarGraphFromDataset(DefaultCategoryDataset dataset, String title, String name, String xLabel, int width, JPanel panel) {
+
         JFreeChart barChart = ChartFactory.createBarChart(title + ": " + name,
                 xLabel, title, dataset);
         barChart.getCategoryPlot().setBackgroundPaint(Color.WHITE);

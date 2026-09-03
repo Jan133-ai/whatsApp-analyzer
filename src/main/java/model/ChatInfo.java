@@ -253,7 +253,7 @@ public class ChatInfo {
             if (message.getSender().equals(chatter)) {
                 if (lastFromOther != null) {
                     long durationMins = Duration.between(lastFromOther, message.getDateTime()).toMinutes();
-                    if (durationMins >= fromMin && durationMins <= toMin) {
+                    if (durationMins >= fromMin && durationMins < toMin) {
                         answers++;
                     }
                     lastFromOther = null;

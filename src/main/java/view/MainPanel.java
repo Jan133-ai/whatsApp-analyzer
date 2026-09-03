@@ -18,14 +18,17 @@ public class MainPanel extends JPanel {
         YearlyPanel yearlyPanel = new YearlyPanel(file);
         add(yearlyPanel);
 
+        ChangePanel changePanel = new ChangePanel(file);
+        add(changePanel);
+
+        AnswerPanel answerPanel = new AnswerPanel(file);
+        add(answerPanel);
+
         WeekdayPanel weekdayPanel = new WeekdayPanel(file);
         add(weekdayPanel);
 
         TimePanel timePanel = new TimePanel(file);
         add(timePanel);
-
-        ChangePanel changePanel = new ChangePanel(file);
-        add(changePanel);
 
         NextSenderPanel nextSenderPanel = new NextSenderPanel(file);
         add(nextSenderPanel);
