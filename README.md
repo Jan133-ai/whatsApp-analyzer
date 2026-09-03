@@ -5,6 +5,8 @@ A Java Swing application that analyzes exported WhatsApp chat logs (`.txt` forma
 - **Messages per sender**
 - **Word usage per sender**
 - **Words per Message per sender**
+- **Time and Weekday of chat activity**
+- **Use of chosen words**
 
 Charts are rendered using [JFreeChart](https://www.jfree.org/jfreechart/).
 
