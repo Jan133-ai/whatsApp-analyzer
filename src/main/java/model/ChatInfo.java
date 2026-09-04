@@ -7,21 +7,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ChatInfo {
 
-    private static final List<String> BAD_ENDINGS = List.of(
-            "Video weggelassen",
-            "Bild weggelassen",
-            "Sticker weggelassen",
-            "Audio weggelassen",
-            "Diese Nachricht wurde gelöscht",
-            " hinzugefügt.",
-            "diese Gruppe erstellt."
-    );
-    static private Message lastMessage;
     private List<Message> messageListGes;
     private Set<String> chatterSet;
     private String name;
@@ -39,55 +28,11 @@ public class ChatInfo {
         }
         this.name = this.name.replace("_", " ");
 
-        messageListGes = new LinkedList<>();
-        chatterSet = new HashSet<>();
+        ChatParser parser = new ChatParser(file);
+        parser.parseFile();
 
-        Scanner reader = new Scanner(this.file);
-        while (reader.hasNextLine()) {
-            String message = reader.nextLine();
-            saveMessage(message);
-        }
-        reader.close();
-    }
-
-    private void saveMessage(String message) {
-        Message messageStruct;
-        message = message.trim();
-        if (message.matches("\\[\\d{2}.\\d{2}.\\d{2}, \\d{2}:\\d{2}:\\d{2}].*")) {
-
-            String[] info = message.split(" ", 4);
-            while (!info[2].endsWith(":")) {
-                String[] helper = info[3].split(" ", 2);
-                info[2] = info[2] + " " + helper[0];
-                info[3] = helper[1];
-            }
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("'['dd.MM.yy,HH:mm:ss']'");
-            LocalDateTime dateTime = LocalDateTime.parse(info[0] + info[1], formatter);
-
-            String sender = info[2].replace(":", "");
-            String text = "";
-            if (info.length > 3) {
-                text = info[3];
-            }
-
-            messageStruct = new Message(text, sender, dateTime);
-
-            lastMessage = messageStruct;
-
-            if (isValidMessage(text)) {
-                messageListGes.add(messageStruct);
-                chatterSet.add(sender);
-            }
-        } else {
-            lastMessage.appendMessage(" " + message);
-        }
-    }
-
-    private boolean isValidMessage(String text) {
-        return BAD_ENDINGS.stream().noneMatch(text::endsWith)
-                && !text.contains("Du hast die Gruppe ")
-                && !text.contains("Nachrichten und Anrufe sind Ende-zu-Ende-verschlüsselt.");
+        messageListGes = parser.getMessageListGes();
+        chatterSet = parser.getChatterSet();
     }
 
     private List<Message> getMessagesByChatter(String name, List<Message> messageList) {
@@ -336,5 +281,9 @@ public class ChatInfo {
 
     public String getName() {
         return name;
+    }
+
+    public File getFile() {
+        return file;
     }
 }

@@ -43,7 +43,6 @@ public class Message {
     public int searchWord(String searchedWord) {
         int wordCounter = 0;
         for (String word : wordsv) {
-            word = word.toLowerCase();
             if (word.equalsIgnoreCase(searchedWord)) {
                 wordCounter++;
             }
