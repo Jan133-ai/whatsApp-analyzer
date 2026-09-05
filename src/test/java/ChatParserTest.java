@@ -65,9 +65,10 @@ public class ChatParserTest {
         assertNotNull(fileNewLineParser.getMessageListGes());
 
         List<Message> messageList = fileNewLineParser.getMessageListGes();
-        assertEquals(4, messageList.size());
+        assertEquals(5, messageList.size());
         assertEquals("Komm schon mal Zur Bushaltestelle", messageList.get(1).getText());
         assertEquals("Der Bus kommt gleich", messageList.get(2).getText());
         assertEquals("Der Bus ist hier", messageList.get(3).getText());
+        assertEquals("Okay", messageList.get(4).getText());
     }
 }

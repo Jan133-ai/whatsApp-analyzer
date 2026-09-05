@@ -65,10 +65,10 @@ public class ChatParser {
                 text = info[3];
             }
 
-            if (mediaInMessage) {
-                text = text.replaceFirst("\\u200e.*", "").trim();
-            } else if (!mediaInMessage && text.startsWith("\u200e")) {
+            if (!mediaInMessage && text.startsWith("\u200e")) {
                 return null;
+            } else {
+                text = text.replaceFirst("\\u200e.*", "").trim();
             }
 
             messageStruct = new Message(text, sender, dateTime);
@@ -80,6 +80,7 @@ public class ChatParser {
 
         } else {
             if (lastMessage != null) {
+                messageLine = messageLine.replaceFirst("\\u200e.*", "").trim();
                 lastMessage.appendMessage(" " + messageLine);
             }
         }
