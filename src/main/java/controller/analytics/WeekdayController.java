@@ -1,9 +1,9 @@
 package controller.analytics;
 
 import controller.AnalyticsController;
+import model.ChatInfo;
 import model.MessageListFilter;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.DayOfWeek;
 import java.util.LinkedHashMap;
@@ -12,8 +12,8 @@ import java.util.Set;
 
 public class WeekdayController extends AnalyticsController {
 
-    public WeekdayController(File file) throws FileNotFoundException {
-        super(file);
+    public WeekdayController(ChatInfo currentChatInfo) throws FileNotFoundException {
+        super(currentChatInfo);
     }
 
     public Map<String, Integer> getWeekdaysMessages(Set<String> selectedChatters) {

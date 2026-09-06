@@ -5,7 +5,6 @@ import view.AnalyticsPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.Year;
 
@@ -13,15 +12,16 @@ public class YearlyPanel extends AnalyticsPanel {
 
     private Year selectedYear;
     private boolean showPieChart;
+    YearlyController yearlyController;
 
-    public YearlyPanel(File file) throws FileNotFoundException {
+    public YearlyPanel(YearlyController yearlyController) throws FileNotFoundException {
 
         super("Yearly Data");
 
         selectedYear = Year.now();
         showPieChart = false;
 
-        YearlyController yearlyController = new YearlyController(file);
+        this.yearlyController = yearlyController;
         String name = yearlyController.getName();
 
         JPanel chartPanel = new JPanel();

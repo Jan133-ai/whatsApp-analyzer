@@ -3,7 +3,6 @@ package controller;
 import model.ChatInfo;
 import model.MessageListFilter;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Set;
 
@@ -14,11 +13,11 @@ public abstract class AnalyticsController {
     protected MessageListFilter nullFilter;
     protected Set<String> chatters;
 
-    public  AnalyticsController(File file) throws FileNotFoundException {
+    public  AnalyticsController(ChatInfo currentChatInfo) throws FileNotFoundException {
 
         nullFilter = new MessageListFilter(null, null, null);
 
-        currentChatInfo = new ChatInfo(file);
+        this.currentChatInfo = currentChatInfo;
 
         name = currentChatInfo.getName();
 

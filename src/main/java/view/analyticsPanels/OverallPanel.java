@@ -5,18 +5,17 @@ import view.AnalyticsPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.FileNotFoundException;
 
 public class OverallPanel extends AnalyticsPanel {
 
     OverallController overallController;
 
-    public OverallPanel(File file) throws FileNotFoundException {
+    public OverallPanel(OverallController overallController) throws FileNotFoundException {
 
         super("Overall Data");
 
-        overallController = new OverallController(file);
+        this.overallController = overallController;
         String name = overallController.getName();
 
         JRadioButton[] radioButtons = addPieBarChoice();

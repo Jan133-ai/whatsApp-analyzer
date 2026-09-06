@@ -1,8 +1,8 @@
 package controller.analytics;
 
 import controller.AnalyticsController;
+import model.ChatInfo;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
@@ -11,8 +11,8 @@ public class NextSenderController extends AnalyticsController {
     Map<String, Map<String, Integer>> nextSendersMap;
     String[] chatterArray;
 
-    public NextSenderController(File file) throws FileNotFoundException {
-        super(file);
+    public NextSenderController(ChatInfo currentChatInfo) throws FileNotFoundException {
+        super(currentChatInfo);
 
         nextSendersMap = currentChatInfo.getNextSenders();
 

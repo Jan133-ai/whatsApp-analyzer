@@ -16,7 +16,6 @@ import view.AnalyticsPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
@@ -29,10 +28,10 @@ public class TimePanel extends AnalyticsPanel {
     TimeController timeController;
     Set<String> selectedChatters;
 
-    public TimePanel(File file) throws FileNotFoundException {
+    public TimePanel(TimeController timeController) throws FileNotFoundException {
         super("Time Data");
 
-        timeController = new TimeController(file);
+        this.timeController = timeController;
         String name = timeController.getName();
 
         Set<String> chatters = timeController.getChatters();

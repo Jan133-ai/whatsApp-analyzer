@@ -1,15 +1,15 @@
 package controller.analytics;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
 import controller.AnalyticsController;
+import model.ChatInfo;
 
 public class WordSearchController extends AnalyticsController{
 
-    public WordSearchController(File file) throws FileNotFoundException {
-        super(file);
+    public WordSearchController(ChatInfo currentChatInfo) throws FileNotFoundException {
+        super(currentChatInfo);
     }
 
     public Map<String, Integer> searchWord(String searchedWord) {

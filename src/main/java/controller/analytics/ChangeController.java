@@ -1,10 +1,10 @@
 package controller.analytics;
 
 import controller.AnalyticsController;
+import model.ChatInfo;
 import model.MessageListFilter;
 import view.enums.TIMESPAN;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -18,8 +18,8 @@ public class ChangeController extends AnalyticsController {
     private final LocalDate mostRecentMessage;
     private final LocalDate firstMessage;
 
-    public ChangeController(File file) throws FileNotFoundException {
-        super(file);
+    public ChangeController(ChatInfo currentChatInfo) throws FileNotFoundException {
+        super(currentChatInfo);
 
         mostRecentMessage = currentChatInfo.getMostRecentMessageDate();
         firstMessage = currentChatInfo.getFirstMessageDate();

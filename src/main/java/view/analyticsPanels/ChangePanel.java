@@ -6,7 +6,6 @@ import view.enums.TIMESPAN;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.format.DateTimeFormatter;
 
@@ -14,10 +13,10 @@ public class ChangePanel extends AnalyticsPanel {
 
     ChangeController changeController;
 
-    public ChangePanel(File file) throws FileNotFoundException {
+    public ChangePanel(ChangeController changeController) throws FileNotFoundException {
         super("Change over Time");
 
-        changeController = new ChangeController(file);
+        this.changeController = changeController;
 
         JPanel chartPanel = new JPanel();
         JPanel chart2Panel = new JPanel();

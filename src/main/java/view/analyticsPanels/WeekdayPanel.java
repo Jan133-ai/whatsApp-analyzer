@@ -5,7 +5,6 @@ import view.AnalyticsPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Set;
 
@@ -17,13 +16,13 @@ public class WeekdayPanel extends AnalyticsPanel {
 
     boolean showPieChart;
 
-    public WeekdayPanel(File file) throws FileNotFoundException {
+    public WeekdayPanel(WeekdayController weekdayController) throws FileNotFoundException {
 
         super("Weekday Data");
 
         showPieChart = false;
 
-        weekdayController = new WeekdayController(file);
+        this.weekdayController = weekdayController;
         String name = weekdayController.getName();
 
         Set<String> chatters = weekdayController.getChatters();

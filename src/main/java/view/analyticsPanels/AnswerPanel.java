@@ -1,7 +1,6 @@
 package view.analyticsPanels;
 
 import java.awt.Component;
-import java.io.File;
 import java.io.FileNotFoundException;
 
 import javax.swing.ButtonGroup;
@@ -16,11 +15,11 @@ public class AnswerPanel extends AnalyticsPanel {
     AnswerController answerController;
     String name;
 
-    public AnswerPanel(File file) throws FileNotFoundException {
+    public AnswerPanel(AnswerController answerController) throws FileNotFoundException {
 
         super("Answer Time");
 
-        answerController = new AnswerController(file);
+        this.answerController = answerController;
         name = answerController.getName();
 
         JPanel buttonsPanel = new JPanel();

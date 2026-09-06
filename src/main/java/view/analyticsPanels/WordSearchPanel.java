@@ -1,6 +1,5 @@
 package view.analyticsPanels;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
@@ -14,10 +13,10 @@ public class WordSearchPanel extends AnalyticsPanel{
 
     WordSearchController wordSearchController;
     
-    public WordSearchPanel(File file) throws FileNotFoundException{
+    public WordSearchPanel(WordSearchController wordSearchController) throws FileNotFoundException{
         super("Word Search");
 
-        this.wordSearchController = new WordSearchController(file);
+        this.wordSearchController = wordSearchController;
         String name = wordSearchController.getName();
 
         JPanel searchPanel = new JPanel();

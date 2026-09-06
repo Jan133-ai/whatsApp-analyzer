@@ -1,6 +1,5 @@
 package controller.analytics;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -8,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import controller.AnalyticsController;
+import model.ChatInfo;
 
 public class AnswerController extends AnalyticsController {
 
@@ -16,9 +16,9 @@ public class AnswerController extends AnalyticsController {
     Map<String, Map<String, Integer>> answerIntevalMap;
     Map<String, Map<String, Float>> answerPercentIntevalMap;
 
-    public AnswerController(File file) throws FileNotFoundException{
+    public AnswerController(ChatInfo currentChatInfo) throws FileNotFoundException{
 
-        super(file);
+        super(currentChatInfo);
         
         answersGes = currentChatInfo.callAnswers(false, 0, 0);
 

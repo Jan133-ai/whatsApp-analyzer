@@ -10,7 +10,6 @@ import view.AnalyticsPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,10 +19,10 @@ public class NextSenderPanel extends AnalyticsPanel {
 
     NextSenderController nextSenderController;
 
-    public NextSenderPanel(File file) throws FileNotFoundException {
+    public NextSenderPanel(NextSenderController nextSenderController) throws FileNotFoundException {
         super("Next Message Data");
 
-        nextSenderController = new NextSenderController(file);
+        this.nextSenderController = nextSenderController;
 
         Map<String, Map<String, Integer>> nextSendersMap = nextSenderController.getNextSendersMap();
 

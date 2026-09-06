@@ -1,8 +1,8 @@
 package controller.analytics;
 
 import controller.AnalyticsController;
+import model.ChatInfo;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
@@ -12,8 +12,8 @@ public class OverallController extends AnalyticsController {
     Map<String, Integer> wordsResults;
     Map<String, Float> wordsPerMessageResults;
 
-    public OverallController(File file) throws FileNotFoundException {
-        super(file);
+    public OverallController(ChatInfo currentChatInfo) throws FileNotFoundException {
+        super(currentChatInfo);
         messageResults = currentChatInfo.callMessages(nullFilter);
         wordsResults = currentChatInfo.callWords(nullFilter);
         wordsPerMessageResults = currentChatInfo.callWordsPerMessage(nullFilter);

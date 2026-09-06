@@ -1,18 +1,18 @@
 package controller.analytics;
 
 import controller.AnalyticsController;
+import model.ChatInfo;
 import model.MessageListFilter;
 import org.jfree.data.xy.DefaultXYZDataset;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.DayOfWeek;
 import java.util.*;
 
 public class TimeController extends AnalyticsController {
 
-    public TimeController(File file) throws FileNotFoundException {
-        super(file);
+    public TimeController(ChatInfo currentChatInfo) throws FileNotFoundException {
+        super(currentChatInfo);
     }
 
     public Map<String, Integer> getTimeMessages(Set<String> selectedChatters) {
